@@ -37,7 +37,7 @@ public class CardRenderer {
             }
         }
 
-        sprites[53] = atlas.getSubimage((int)(w * 0.875f), (int)(h * 0.875f), (int)(w * 0.125f), (int)(h * 0.125f));
+        sprites[52] = atlas.getSubimage((int)(w * 0.875f), (int)(h * 0.875f), (int)(w * 0.125f), (int)(h * 0.125f));
 
         //TODO:depreciate
         //try {
@@ -48,10 +48,8 @@ public class CardRenderer {
     }
 
     //draws a card
-    static void drawCard(Graphics g, int x, int y, int suit, int num, int scale){
-        if(sprites == null) {
-            return;
-        };
-        g.drawImage(sprites[(suit * 13) + num], x, y, (int)scale, (int)(scale * (7.0f/5.0f)), null);
+    static void drawCard(Graphics g, boolean shown, int x, int y, int suit, int num, int scale){
+        if(sprites == null)return;
+        g.drawImage(shown ? sprites[(suit * 13) + num] : sprites[52], x, y, (int)scale, (int)(scale * (7.0f/5.0f)), null);
     }
 }

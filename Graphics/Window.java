@@ -41,9 +41,9 @@ public class Window {
     }
 
     void Render(Graphics g){
-        cr.drawCard(g, 0  , 0, 0, 0, 100);
-        cr.drawCard(g, 100, 0, 1, 6, 100);
-        cr.drawCard(g, 200, 0, 2, 2, 100);
-        cr.drawCard(g, 300, 0, 3, 11, 100);
+        cr.drawCard(g, true, 0  , 0, 0, 0, 100);
+        cr.drawCard(g, false, 100, 0, 1, 6, 100);
+        cr.drawCard(g, true, 200, 0, 2, 2, 100);
+        cr.drawCard(g, true, 300, 0, 3, 11, 100);
     }
 }
