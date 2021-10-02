@@ -61,19 +61,18 @@ public class Table {
     //finds the winner
     Player determineWinner(){
         Player p = null;
-        handValue current_highest = new handValue(0, 0);
+        handValue highhv = new handValue(0, 0);
         for(int i = 0; i < players.size(); i++){
-            if(players.get(i).playing){
-                handValue hv = players.get(i).handvalue();
-                if(hv.value > current_highest.value){
-                    p = players.get(i);
-                    current_highest = p.handvalue();
-                }
-                if(hv.value == current_highest.value){
-                    if(hv.highcard > current_highest.highcard){
-                        p = players.get(i);
-                        current_highest = p.handvalue();
-                    }
+            Player current = players.get(i);
+
+            if(current.playing){
+                handValue hv = current.handvalue();
+                
+                //I hate how long the variables are here
+                if(hv.value > highhv.value || (hv.value == highhv.value && hv.highcard > highhv.highcard))
+                {
+                    p = current;
+                    highhv = hv;
                 }
             }
         }

@@ -22,12 +22,6 @@ public class Main{
             System.out.println("Enter the name of a player or type 'start' to begin!");
             buffer = sc.nextLine();
         }
-        //for(int i = 0; i < 4000; i++){
-        //    t.game();
-        //}
         while(true) t.game();
-        //t.players.forEach(player->{
-        //    System.out.println(player.name + "..." + player.wins);
-        //});
     }
 }
