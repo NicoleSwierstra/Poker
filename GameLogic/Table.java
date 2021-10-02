@@ -1,3 +1,4 @@
+package GameLogic;
 import java.util.*;
 
 public class Table {
@@ -8,9 +9,9 @@ public class Table {
     int turn;
     int com_turnover;
     final int[] comt = {0, 3, 4, 5};
-    Scanner scanner;
+    public Scanner scanner;
     
-    Table() {
+    public Table() {
         players = new ArrayList<Player>();
         deck = new Deck();
         reset();
@@ -24,7 +25,7 @@ public class Table {
     }
 
     //adds a player to the list of players
-    void addPlayer(String name){
+    public void addPlayer(String name){
         players.add(new Player(name, this));
     }
 
@@ -43,7 +44,7 @@ public class Table {
     }
 
     //runs a game, which is defined as a single deal
-    void game(){
+    public void game(){
         startGame(); //starts the game
         com_turnover = 5;
         //first round

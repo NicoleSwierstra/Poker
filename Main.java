@@ -1,5 +1,7 @@
 import java.util.*;
 
+import GameLogic.Table;
+
 public class Main{
 
     final static String startup = 
