@@ -10,7 +10,7 @@ public class Window {
 
         private static final long serialVersionUID = 1L;
 
-        int panewidth = 1280, paneheight = 720;
+        int panewidth = 1440, paneheight = 720;
 
         TableRenderer tr;
         Interact interact;
@@ -19,6 +19,13 @@ public class Window {
             tr = r;
             interact = in;
             setPreferredSize(new Dimension(panewidth, paneheight));
+            JComponent pane = this;
+            pane.addComponentListener(new ComponentAdapter() {
+                public void componentResized(ComponentEvent componentEvent) {
+                    paneheight = pane.getHeight();
+                    panewidth = pane.getWidth();
+                }
+            });
         }
 
         @Override
@@ -49,7 +56,7 @@ public class Window {
         mainwindow = new JFrame("Poker");
         mainwindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         interact = new Interact();
-        tr = new TableRenderer();
+        tr = new TableRenderer(this);
         g = new GraphicPanel(tr, interact);
         setupInput();
         mainwindow.add(g);
