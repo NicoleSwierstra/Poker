@@ -1,7 +1,6 @@
 package Graphics;
 
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import java.io.File;
@@ -15,17 +14,19 @@ public class CardRenderer {
 
     //loads the atlas into an array
     CardRenderer(){
+        //loads cards atlas into a buffered image
         BufferedImage atlas;
         try {
             atlas = ImageIO.read(new File("res/cards.png"));
-            System.out.println(atlas.getHeight());
         } catch (IOException e) {
             atlas = null;
             System.out.println("FAIL");
+            return;
         }
 
         int w = atlas.getWidth(), h = atlas.getHeight();
 
+        //loads the atlas into seperate images
         sprites = new BufferedImage[53];
         for(int s = 0; s < 4; s++){
             for(int n = 0; n < 13; n++){
@@ -37,14 +38,8 @@ public class CardRenderer {
             }
         }
 
+        //adds the last card, the back
         sprites[52] = atlas.getSubimage((int)(w * 0.875f), (int)(h * 0.875f), (int)(w * 0.125f), (int)(h * 0.125f));
-
-        //TODO:depreciate
-        //try {
-        //    ImageIO.write(sprites[0], "PNG", new File("temp.png"));
-        //} catch (IOException e) {
-        //    e.printStackTrace();
-        //}
     }
 
     //draws a card

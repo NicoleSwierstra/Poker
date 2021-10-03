@@ -2,48 +2,81 @@ package Graphics;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class Window {
 
-    public class GraphicPanel extends JComponent {
+    public class GraphicPanel extends JComponent implements Runnable {
 
         private static final long serialVersionUID = 1L;
 
-        Window win;
+        int panewidth = 1280, paneheight = 720;
 
-        GraphicPanel(Window w) {
-            win = w;
-            setPreferredSize(new Dimension(640, 480));
+        TableRenderer tr;
+        Interact interact;
+
+        GraphicPanel(TableRenderer r, Interact in) {
+            tr = r;
+            interact = in;
+            setPreferredSize(new Dimension(panewidth, paneheight));
         }
 
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
             g.setColor(new Color(0.1f, 0.3f, 0.1f));
-            g.fillRect(0, 0, 640, 480);
-            win.Render(g);
+            g.fillRect(0, 0, panewidth, paneheight);
+            tr.Render(g);
+            interact.render(g);
+        }
+
+        public void run() {
+            long end;
+            while(true) {
+                end = System.nanoTime() + 16666666;
+                this.repaint();
+                while(System.nanoTime() < end);
+            }
         }
     }
 
     JFrame mainwindow;
     GraphicPanel g;
-    CardRenderer cr;
+    TableRenderer tr;
+    Interact interact;
 
     public Window(){
         mainwindow = new JFrame("Poker");
         mainwindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        cr = new CardRenderer();
-        g = new GraphicPanel(this);
+        interact = new Interact();
+        tr = new TableRenderer();
+        g = new GraphicPanel(tr, interact);
+        setupInput();
         mainwindow.add(g);
         mainwindow.pack();
-        mainwindow.setBackground(new Color(0, 0, 0));
         mainwindow.setVisible(true);
     }
 
-    void Render(Graphics g){
-        cr.drawCard(g, true, 0  , 0, 0, 0, 100);
-        cr.drawCard(g, false, 100, 0, 1, 6, 100);
-        cr.drawCard(g, true, 200, 0, 2, 2, 100);
-        cr.drawCard(g, true, 300, 0, 3, 11, 100);
+    void start(){
+        g.run();
+    }
+
+    void setupInput(){
+        g.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int x=e.getX();
+                int y=e.getY();
+                interact.onMouse(x, y);
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
     }
 }
