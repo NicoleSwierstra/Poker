@@ -46,7 +46,6 @@ public class GUI {
     void onMouse(float x, float y){
         Buttons.forEach(b -> {
             checkIntersect(b, true, x, y);
-            System.out.println(x + ", " + y);
         });
     }
 
@@ -79,7 +78,7 @@ public class GUI {
             g.setColor(new Color(0, 0, 0));
             g.drawRect(xmin, ymin, bw, bh);
             int size = bh / 2;
-            g.setFont(new Font("", 0, size));
+            g.setFont(new Font("Comic Sans MS", 0, size));
 
             g.drawString(b.label, xmin, ymax);
         });

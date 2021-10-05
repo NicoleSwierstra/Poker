@@ -83,11 +83,11 @@ public class TableRenderer {
         }
     }
 
-    void Render(Graphics g, int pot, java.util.List<Card> com, java.util.List<Player> players, int turnover, int turn){
+    void Render(Graphics g, int pot, java.util.List<Card> com, java.util.List<Player> players, int turnover, int turn, boolean showall){
         int h = win.g.paneheight, w = win.g.panewidth;
         int t = 0;
         for(int i : pPos.playerIndexes(players.size())){
-            renderPlayer((Graphics2D)g, pPos.getX(i, w), pPos.getY(i, h), pPos.getR(i), t==turn, players.get(t));
+            renderPlayer((Graphics2D)g, pPos.getX(i, w), pPos.getY(i, h), pPos.getR(i), t==turn || showall, players.get(t));
             t++;
         }
 

@@ -8,6 +8,7 @@ public class Table {
     protected int pot;
     protected int turn;
     protected int com_turnover;
+    protected boolean end;
     protected final int[] comt = {0, 3, 4, 5};
     public Scanner scanner;
     
@@ -36,6 +37,7 @@ public class Table {
 
     //starts the game
     protected void startGame() {
+        end = false;
         reset();
         for(int i = 0; i < players.size(); i++){
             dealToPlayer(i);
@@ -52,6 +54,7 @@ public class Table {
         for(int i = 0; i < 4; i++){
             round(i);
         }
+        end = true;
         Player winner = determineWinner();
         winner.money += pot;
         winner.wins++;
@@ -116,13 +119,13 @@ public class Table {
             "It is now " + p.name + "'s turn, press enter to continue"
         );
         scanner.nextLine();
-        printTable(turnNum);
+        printTable(turnNum, false);
         p.takeTurn(scanner);
         clearConsole();
     }
 
     //prints the table
-    void printTable(int turn){
+    void printTable(int turn, boolean showall){
         clearConsole();
 
         System.out.println("Pot: $" + pot + "\n");
@@ -132,21 +135,14 @@ public class Table {
 
         //prints each player
         for(int i = 0; i < players.size(); i++){
-            players.get(i).printHand(i == turn);
+            players.get(i).printHand(i == turn || showall);
             System.out.println();
         }
     }
 
     //for end of game
     void printEnd(Player winner){
-        clearConsole();
-        System.out.println("community:");
-        printCommunity();
-        System.out.println("\n");
-        for(int i = 0; i < players.size(); i++){
-            players.get(i).printHand(true);
-            System.out.println();
-        }
+        printTable(0, true);
         System.out.println(winner.name + " wins $" + pot + "!!");
     }
 
