@@ -1,0 +1,6 @@
+8 * 8 grid of 5 x 7 cards
+150 * 210 = card
+1200 * 1680 = full image
+
+first row a - 8
+2nd row 9 - k
