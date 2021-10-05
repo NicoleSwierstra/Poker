@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 
 public class GUI {
     //button class
@@ -77,10 +78,14 @@ public class GUI {
             g.fillRect(xmin, ymin, bw, bh);
             g.setColor(new Color(0, 0, 0));
             g.drawRect(xmin, ymin, bw, bh);
-            int size = bh / 2;
-            g.setFont(new Font("Comic Sans MS", 0, size));
 
-            g.drawString(b.label, xmin, ymax);
+
+            Font font = new Font("Comic Sans MS", 0, height/30);
+            FontMetrics metrics = g.getFontMetrics(font);
+            int x = xmin + (bw - metrics.stringWidth(b.label)) / 2;
+            int y = ymin + ((bh - metrics.getHeight()) / 2) + metrics.getAscent();
+            g.setFont(font);
+            g.drawString(b.label, x, y);
         });
     }
 

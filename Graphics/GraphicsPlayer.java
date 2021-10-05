@@ -1,10 +1,8 @@
 package Graphics;
 
-import java.util.Scanner;
-
 import GameLogic.*;
 
-public class GraphicsPlayer extends Player {
+public class GraphicsPlayer extends GameLogic.Player {
     boolean endturn;
 
     public GraphicsPlayer(String name, Table table) {
@@ -26,5 +24,6 @@ public class GraphicsPlayer extends Player {
             }
         );
         gui.applyQueue();
+        while(true);
     }
 }

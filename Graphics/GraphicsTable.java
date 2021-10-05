@@ -35,10 +35,10 @@ public class GraphicsTable extends Table {
         } while(!allAdvance());
     }
 
-    //@Override
-    //protected void playerTurn(int turnNum){
-    //    showCards = false;
-    //    Player p = players.get(turnNum);
-    //    //((GraphicsPlayer)p).takeTurn(gui);
-    //}
+    @Override
+    protected void playerTurn(int turnNum){
+        showCards = false;
+        Player p = players.get(turnNum);
+        ((GraphicsPlayer)p).takeTurn(gui);
+    }
 }

@@ -4,7 +4,7 @@ import java.util.*;
 public class Player {
     public String name;
     public int money;
-    Table table;
+    protected Table table;
     public List<Card> hand;
     public boolean playing;
     int deficit;
