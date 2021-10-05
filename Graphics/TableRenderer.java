@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import java.awt.geom.*;
+import java.util.*;
+
+import GameLogic.*;
 
 import javax.imageio.ImageIO;
 
@@ -30,12 +33,31 @@ class pPos {
     static float getR(int pos){
         return p[pos][2];
     }
+
+    static int[] playerIndexes(int num){
+        switch(num){
+            case 2:
+                return new int[]{2, 6};
+            case 3:
+                return new int[]{1, 4, 7};
+            case 4:
+                return new int[]{0, 2, 4, 6};
+            case 5:
+                return new int[]{1, 3, 4, 5, 7};
+            case 6:
+                return new int[]{0, 1, 3, 4, 5, 7};
+            default:
+                return null;
+        }
+    }
 }
 
 public class TableRenderer {
     CardRenderer cr;
     BufferedImage chip;
     Window win;
+    float[][] chipLoc;
+
     Random r;
 
     TableRenderer(Window w){
@@ -47,34 +69,47 @@ public class TableRenderer {
         } catch (IOException e) {
             System.out.println("FAIL");
         }
+
+        chipLoc = new float[50][2];
+        for(int i = 0; i < 50; i++){
+            float x = r.nextFloat(),
+                y = r.nextFloat();  
+            x *= x;
+            x += 0.5f;
+            x /= 1.5;
+            x = r.nextBoolean() ? x : 1.0f - x;
+            chipLoc[i][0] = 0.32f + x * 0.3f;
+            chipLoc[i][1] = 0.29f + y * 0.2f;
+        }
     }
 
-    void Render(Graphics g){
+    void Render(Graphics g, int pot, java.util.List<Card> com, java.util.List<Player> players, int turnover, int turn){
         int h = win.g.paneheight, w = win.g.panewidth;
-        renderPlayer((Graphics2D)g, pPos.getX(0, w), pPos.getY(0, h), pPos.getR(0), false);
-        renderPlayer((Graphics2D)g, pPos.getX(1, w), pPos.getY(1, h), pPos.getR(1), false);
-        renderPlayer((Graphics2D)g, pPos.getX(3, w), pPos.getY(3, h), pPos.getR(3), false);
-        renderPlayer((Graphics2D)g, pPos.getX(4, w), pPos.getY(4, h), pPos.getR(4), false);
-        renderPlayer((Graphics2D)g, pPos.getX(5, w), pPos.getY(5, h), pPos.getR(5), false);
-        renderPlayer((Graphics2D)g, pPos.getX(7, w), pPos.getY(7, h), pPos.getR(7),  true);
-
-        for(int i = 0; i < 5; i++) {
-            cr.drawCard(g, true, (int)(w * (0.25f + (0.08f * i))), (int)(h * 0.65f) - 70, (i * 3) % 4, (i * 50) % 13, 100);
+        int t = 0;
+        for(int i : pPos.playerIndexes(players.size())){
+            renderPlayer((Graphics2D)g, pPos.getX(i, w), pPos.getY(i, h), pPos.getR(i), t==turn, players.get(t));
+            t++;
         }
+
+        if(com != null)
+            for(int i = 0; i < 5; i++) {
+                cr.drawCard(g, turnover > i, (int)(w * (0.25f + (0.08f * i))), (int)(h * 0.65f) - 70, com.get(i).suit, com.get(i).num, 100);
+            }
         cr.drawCard(g, false, (int)(w * 0.65f), (int)(h * 0.65f) - 70, 0, 0, 100);
-        drawPot(g, 40, w, h);
+        drawPot(g, pot, w, h);
     };
 
     //renders a player's hand and their chips
-    void renderPlayer(Graphics2D g, int x, int y, float r, boolean show){
+    void renderPlayer(Graphics2D g, int x, int y, float r, boolean show, Player p){
         AffineTransform bt = g.getTransform();
         g.translate(x, y);
         g.rotate(Math.toRadians(r));
-        
-        cr.drawCard(g, show, -170, -70, 0, 11, 100);
-        cr.drawCard(g, show,  -50, -70, 2, 8, 100);
+        if(p.hand != null){
+            cr.drawCard(g, show, -170, -70, p.hand.get(0).suit, p.hand.get(0).num, 100);
+            cr.drawCard(g, show,  -50, -70, p.hand.get(1).suit, p.hand.get(1).num, 100);
+        }
 
-        for(int i = 0; i < 20; i++){
+        for(int i = 0; i < p.money; i++){
             drawChip(g, 0, 60 + ((i/7) * 50), -70 + ((i % 7) * 15), 50);
         }
         g.setTransform(bt);
@@ -95,7 +130,7 @@ public class TableRenderer {
 
     void drawPot(Graphics g, int amount, int width, int height){
         for(int i = 0; i < amount; i++){
-            drawChip(g, 0, (int)(width * 0.25f) + r.nextInt(width/2), (int)(height * 0.29f) + r.nextInt(width/5), 50);
+            drawChip(g, 0, (int)(chipLoc[i][0] * width), (int)(chipLoc[i][1] * height), 50);
         }
     }
 }

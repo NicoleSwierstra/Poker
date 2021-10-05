@@ -2,8 +2,8 @@ package GameLogic;
 import java.io.PrintStream;
 
 public class Card {
-    byte suit;
-    byte num;
+    public byte suit;
+    public byte num;
 
     public Card(int suit, int num){
         this.suit = (byte)suit;

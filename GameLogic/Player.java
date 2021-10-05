@@ -5,8 +5,8 @@ public class Player {
     public String name;
     public int money;
     Table table;
-    List<Card> hand;
-    boolean playing;
+    public List<Card> hand;
+    public boolean playing;
     int deficit;
     int wins;
 

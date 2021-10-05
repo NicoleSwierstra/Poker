@@ -2,13 +2,13 @@ package GameLogic;
 import java.util.*;
 
 public class Table {
-    List<Player> players;
-    List<Card> community;
+    protected List<Player> players;
+    protected List<Card> community;
     Deck deck;
-    int pot;
-    int turn;
-    int com_turnover;
-    final int[] comt = {0, 3, 4, 5};
+    protected int pot;
+    protected int turn;
+    protected int com_turnover;
+    protected final int[] comt = {0, 3, 4, 5};
     public Scanner scanner;
     
     public Table() {
@@ -35,7 +35,7 @@ public class Table {
     }
 
     //starts the game
-    void startGame() {
+    protected void startGame() {
         reset();
         for(int i = 0; i < players.size(); i++){
             dealToPlayer(i);
@@ -81,7 +81,7 @@ public class Table {
     }
 
     //round
-    void round(int num){
+    protected void round(int num){
         System.out.println("Round " + (num + 1) + ", press enter to continue");
         scanner.nextLine();
         com_turnover = comt[num];
@@ -98,7 +98,7 @@ public class Table {
         return players.get(pnum).deficit == 0 || !players.get(pnum).playing;
     }
 
-    boolean allAdvance() {
+    protected boolean allAdvance() {
         for(int i = 0; i < players.size(); i++){
             if (!canAdvance(i)) return false;
         }
@@ -110,7 +110,7 @@ public class Table {
     }
 
     //whoooo boy
-    void playerTurn(int turnNum){
+    protected void playerTurn(int turnNum){
         Player p = players.get(turnNum);
         System.out.println(
             "It is now " + p.name + "'s turn, press enter to continue"

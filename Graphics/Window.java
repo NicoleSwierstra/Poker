@@ -12,10 +12,12 @@ public class Window {
 
         int panewidth = 1440, paneheight = 720;
 
-        TableRenderer tr;
-        Interact interact;
+        boolean renderGame;
 
-        GraphicPanel(TableRenderer r, Interact in) {
+        GraphicsTable tr;
+        GUI interact;
+
+        GraphicPanel(GraphicsTable r, GUI in) {
             tr = r;
             interact = in;
             setPreferredSize(new Dimension(panewidth, paneheight));
@@ -33,8 +35,8 @@ public class Window {
             super.paintComponent(g);
             g.setColor(new Color(0.1f, 0.3f, 0.1f));
             g.fillRect(0, 0, panewidth, paneheight);
-            tr.Render(g);
-            interact.render(g);
+            if(renderGame) tr.Render(g);
+            interact.render(g, panewidth, paneheight);
         }
 
         public void run() {
@@ -49,15 +51,15 @@ public class Window {
 
     JFrame mainwindow;
     GraphicPanel g;
-    TableRenderer tr;
-    Interact interact;
+    GraphicsTable tr;
+    GUI gui;
 
     public Window(){
         mainwindow = new JFrame("Poker");
         mainwindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        interact = new Interact();
-        tr = new TableRenderer(this);
-        g = new GraphicPanel(tr, interact);
+        gui = new GUI();
+        tr = new GraphicsTable(this);
+        g = new GraphicPanel(tr, gui);
         setupInput();
         mainwindow.add(g);
         mainwindow.pack();
@@ -72,9 +74,9 @@ public class Window {
         g.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int x=e.getX();
-                int y=e.getY();
-                interact.onMouse(x, y);
+                float x = e.getX() / (float)g.panewidth;
+                float y = e.getY() / (float)g.paneheight;
+                gui.onMouse(x, y);
             }
             @Override
             public void mousePressed(MouseEvent e) {}
