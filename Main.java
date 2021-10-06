@@ -8,5 +8,7 @@ public class Main{
         // adriqn did it
         // I did it
         // kevin😂
+        //ayo weres the spec for card texture
+        
     }
 }
