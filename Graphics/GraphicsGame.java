@@ -30,6 +30,9 @@ public class GraphicsGame {
         w.tr.addPlayer("Player 1");
         w.tr.addPlayer("Player 2");
         w.tr.addPlayer("Player 3");
+        w.tr.addPlayer("Player 4");
+        w.tr.addPlayer("Player 5");
+        w.tr.addPlayer("Player 6");
         menu();
         new Thread(() -> w.start()).start();
         while(!w.g.renderGame) System.out.println(w.g.renderGame);

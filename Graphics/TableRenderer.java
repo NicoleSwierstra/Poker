@@ -95,7 +95,8 @@ public class TableRenderer {
             for(int i = 0; i < 5; i++) {
                 cr.drawCard(g, turnover > i, (int)(w * (0.25f + (0.08f * i))), (int)(h * 0.65f) - 70, com.get(i).suit, com.get(i).num, 100);
             }
-        cr.drawCard(g, false, (int)(w * 0.65f), (int)(h * 0.65f) - 70, 0, 0, 100);
+        for(int i = 0; i < 10; i++)
+            cr.drawCard(g, false, (int)(w * (0.65f)), (int)(h * 0.65f) - 70 - i, 0, 0, 100);
         drawPot(g, pot, w, h);
     };
 
