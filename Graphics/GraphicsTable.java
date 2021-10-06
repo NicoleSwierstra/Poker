@@ -47,6 +47,20 @@ public class GraphicsTable extends Table {
 
     @Override
     protected void printEnd(Player winner){
-        
+        gui.queueText(winner.name + " wins $" + pot, 0.5f, 0.3f, 0.02f, 0.2f);
+        boolean goforth = false;
+        gui.queueButton(
+            "Play Again", 
+            0.5f, 0.5f, 0.1f, 0.1f,
+            () -> {gui.applyQueue();}
+        );
+        gui.queueButton(
+            "Quit", 
+            0.5f, 0.65f, 0.1f, 0.1f,
+            () -> { System.exit(0); }
+        );
+        gui.applyQueue();
+
+        while(!goforth){System.out.println("");};
     }
 }

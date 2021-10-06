@@ -58,7 +58,7 @@ public class Table {
         Player winner = determineWinner();
         winner.money += pot;
         winner.wins++;
-        //printEnd(winner);
+        printEnd(winner);
         pot = 0;
     }
 

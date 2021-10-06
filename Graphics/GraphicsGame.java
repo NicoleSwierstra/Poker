@@ -4,9 +4,11 @@ public class GraphicsGame {
     Window w;
 
     public void menu(){
+        w.gui.queueText("POKER", 0.5f, 0.3f, 0.2f, 0.2f);
+
         w.gui.queueButton(
             "Start", 
-            0.45f, 0.45f, 0.55f, 0.55f,
+            0.5f, 0.5f, 0.1f, 0.1f,
             () -> {
                 w.g.renderGame = true; 
                 w.gui.applyQueue();
@@ -14,7 +16,7 @@ public class GraphicsGame {
         );
         w.gui.queueButton(
             "Quit", 
-            0.45f, 0.60f, 0.55f, 0.70f,
+            0.5f, 0.65f, 0.1f, 0.1f,
             () -> {
                 w.mainwindow.setVisible(false);
                 System.exit(0);
@@ -30,8 +32,7 @@ public class GraphicsGame {
         w.tr.addPlayer("Player 3");
         menu();
         new Thread(() -> w.start()).start();
-        w.g.renderGame = true;
-        //while(!w.g.renderGame);
-        w.tr.game();
+        while(!w.g.renderGame) System.out.println(w.g.renderGame);
+        while(true) w.tr.game();
     }
 }

@@ -8,91 +8,110 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 
 public class GUI {
-    //button class
-    class Button {
-        float xmin, xmax, ymin, ymax;
+    public class GUIElement{
+        float x, y, width, height;
+    }
+
+    class Button extends GUIElement {
         String label;
         ButtonInterface bi;
 
-        Button(String label, float xmin, float ymin, float xmax, float ymax, ButtonInterface bi){
+        Button(String label, float x, float y, float width, float height, ButtonInterface bi){
             this.label = label;
-            this.xmin = xmin;
-            this.xmax = xmax;
-            this.ymin = ymin;
-            this.ymax = ymax;
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
             this.bi = bi;
         }
     }
     
-    class Text {
+    class Text extends GUIElement {
         String text;
 
-        Text(String t){ 
+        Text(String t, float x, float y, float width, float height){ 
             text = t;
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
         }
     }
 
     //the important part
-    public List<Button> Buttons;
-    public List<Button> bQueue;
+    public List<GUIElement> Elements;
+    public List<GUIElement> eQueue;
 
     public interface ButtonInterface {void onClick();}
 
     GUI(){
-        Buttons = new ArrayList<Button>();
-        bQueue = new ArrayList<Button>();
+        Elements = new ArrayList<GUIElement>();
+        eQueue =  new ArrayList<GUIElement>();
     }
 
     //on mouse checks intersect
     void onMouse(float x, float y){
-        Buttons.forEach(b -> {
-            checkIntersect(b, true, x, y);
+        Elements.forEach(b -> {
+            if(b instanceof Button)
+                checkIntersect((Button)b, true, x, y);
         });
     }
 
     //adds a button
-    void queueButton(String label, float xmin, float ymin, float xmax, float ymax, ButtonInterface bi){
-        bQueue.add(new Button(label, xmin, ymin, xmax, ymax, bi));
+    void queueButton(String label, float x, float y, float width, float height, ButtonInterface bi){
+        eQueue.add(new Button(label, x, y, width, height, bi));
     }
 
     //adds a text field
-    void queueText(String label){
-
+    void queueText(String label, float x, float y, float width, float height){
+        eQueue.add(new Text(label, x, y, width, height));
     }
 
     //clears all buttons
     void applyQueue(){
-        Buttons = bQueue;
-        bQueue = new ArrayList<Button>();
+        Elements = eQueue;
+        eQueue = new ArrayList<GUIElement>();
     }
 
     //renders all buttons, and render the moused over button specially
     void render(Graphics g, int width, int height){
         //render button
-        Buttons.forEach(b -> {
-            g.setColor(new Color(255, 255, 255));
-            int xmin = (int)(b.xmin * width), xmax = (int)(b.xmax * width),
-                ymin = (int)(b.ymin * height), ymax = (int)(b.ymax * height),
-                bw = xmax - xmin, bh = ymax - ymin;
+        Elements.forEach(b -> {
+            g.setColor(new Color(255, 255, 255, 125));
+            int xmin = (int)(b.x * width) - (int)(b.width * width)/2, ymin = (int)(b.y * height) - (int)(b.height * height)/2, 
+                bw = (int)(b.width * width), bh = (int)(b.height * height);
 
-            g.fillRect(xmin, ymin, bw, bh);
-            g.setColor(new Color(0, 0, 0));
-            g.drawRect(xmin, ymin, bw, bh);
+            if (b instanceof Button){
+                Font font = new Font("Comic Sans MS", 0, height/30);
+                FontMetrics metrics = g.getFontMetrics(font);
+                g.fillRect(xmin, ymin, bw, bh);
+                g.setColor(new Color(0, 0, 0));
+                g.drawRect(xmin, ymin, bw, bh);
 
+                int x = xmin + (bw - metrics.stringWidth(((Button)b).label)) / 2;
+                int y = ymin + ((bh - metrics.getHeight()) / 2) + metrics.getAscent();
+                g.setFont(font);
+                g.drawString(((Button)b).label, x, y);
+            }
 
-            Font font = new Font("Comic Sans MS", 0, height/30);
-            FontMetrics metrics = g.getFontMetrics(font);
-            int x = xmin + (bw - metrics.stringWidth(b.label)) / 2;
-            int y = ymin + ((bh - metrics.getHeight()) / 2) + metrics.getAscent();
-            g.setFont(font);
-            g.drawString(b.label, x, y);
+            if (b instanceof Text){
+                Font font = new Font("Comic Sans MS", 0, (int)(b.height * height));
+                FontMetrics metrics = g.getFontMetrics(font);
+                g.setColor(new Color(255, 255, 255, 255));
+                int x = xmin + (bw - metrics.stringWidth(((Text)b).text)) / 2;
+                int y = ymin + ((bh - metrics.getHeight()) / 2) + metrics.getAscent();
+                g.setFont(font);
+                g.drawString(((Text)b).text, x, y);
+            }
         });
     }
 
     //checks intersect of the button, presses it if press is enabled
     boolean checkIntersect(Button b, boolean press, float x, float y){
-        boolean isx = x < b.xmax && x > b.xmin;
-        boolean isy = y < b.ymax && y > b.ymin;
+        float xmin = b.x - b.width/2, ymin = b.y - b.height/2, 
+            xmax = xmin + b.width, ymax = xmin + b.height;
+        boolean isx = x < xmax && x > xmin;
+        boolean isy = y < ymax && y > ymin;
         if(isx && isy){
             if(press) b.bi.onClick();
             return true;
