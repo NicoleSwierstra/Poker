@@ -30,6 +30,8 @@ public class GraphicsGame {
         w.tr.addPlayer("Player 3");
         menu();
         new Thread(() -> w.start()).start();
+        w.g.renderGame = true;
+        //while(!w.g.renderGame);
         w.tr.game();
     }
 }

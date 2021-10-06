@@ -58,7 +58,7 @@ public class Table {
         Player winner = determineWinner();
         winner.money += pot;
         winner.wins++;
-        printEnd(winner);
+        //printEnd(winner);
         pot = 0;
     }
 
@@ -141,7 +141,7 @@ public class Table {
     }
 
     //for end of game
-    void printEnd(Player winner){
+    protected void printEnd(Player winner){
         printTable(0, true);
         System.out.println(winner.name + " wins $" + pot + "!!");
     }

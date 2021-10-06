@@ -7,7 +7,7 @@ public class Player {
     protected Table table;
     public List<Card> hand;
     public boolean playing;
-    int deficit;
+    public int deficit;
     int wins;
 
     //constructor, obviously
@@ -30,7 +30,6 @@ public class Player {
                     case "b":
                         int b = Integer.valueOf(getstring.split(" ")[1]);
                         if(b >= deficit){
-                            table.raiseDeficit(b - deficit);
                             bet(b);
                         }
                             
@@ -64,7 +63,8 @@ public class Player {
     }
 
     //betting method
-    private void bet(int amount){
+    public void bet(int amount){
+        table.raiseDeficit(amount - deficit);
         table.pot += amount;
         money -= amount;
         deficit -= amount;

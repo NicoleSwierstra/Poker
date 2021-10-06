@@ -9,10 +9,11 @@ public class GraphicsTable extends Table {
     Window win;
     boolean showCards = true;
 
-    GraphicsTable(Window win){
+    GraphicsTable(Window win, GUI gui){
         super();
         tr = new TableRenderer(win);
         this.win = win;
+        this.gui = gui;
     }
 
     void start(){
@@ -29,6 +30,7 @@ public class GraphicsTable extends Table {
         do {
             for(int i = 0; i < players.size(); i++){
                 if(players.get(i).playing){
+                    turn = i;
                     playerTurn(i);
                 }
             }
@@ -39,6 +41,12 @@ public class GraphicsTable extends Table {
     protected void playerTurn(int turnNum){
         showCards = false;
         Player p = players.get(turnNum);
-        ((GraphicsPlayer)p).takeTurn(gui);
+        TurnGUI tg = new TurnGUI(p);
+        tg.takeTurn(gui, this);
+    }
+
+    @Override
+    protected void printEnd(Player winner){
+        
     }
 }

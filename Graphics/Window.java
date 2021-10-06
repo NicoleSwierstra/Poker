@@ -58,7 +58,7 @@ public class Window {
         mainwindow = new JFrame("Poker");
         mainwindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gui = new GUI();
-        tr = new GraphicsTable(this);
+        tr = new GraphicsTable(this, gui);
         g = new GraphicPanel(tr, gui);
         setupInput();
         mainwindow.add(g);
