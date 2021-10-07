@@ -74,7 +74,7 @@ public class GUI {
     }
 
     //renders all buttons, and render the moused over button specially
-    void render(Graphics g, int width, int height){
+    void render(Graphics g, int width, int height, float xmouse, float ymouse){
         //render button
         Elements.forEach(b -> {
             g.setColor(new Color(255, 255, 255, 125));
@@ -84,6 +84,9 @@ public class GUI {
             if (b instanceof Button){
                 Font font = new Font("Comic Sans MS", 0, height/30);
                 FontMetrics metrics = g.getFontMetrics(font);
+                if(checkIntersect((Button)b, false, xmouse, ymouse)) 
+                    g.setColor(new Color(255, 0, 0, 125));
+                
                 g.fillRect(xmin, ymin, bw, bh);
                 g.setColor(new Color(0, 0, 0));
                 g.drawRect(xmin, ymin, bw, bh);
@@ -97,10 +100,12 @@ public class GUI {
             if (b instanceof Text){
                 Font font = new Font("Comic Sans MS", 0, (int)(b.height * height));
                 FontMetrics metrics = g.getFontMetrics(font);
-                g.setColor(new Color(255, 255, 255, 255));
                 int x = xmin + (bw - metrics.stringWidth(((Text)b).text)) / 2;
                 int y = ymin + ((bh - metrics.getHeight()) / 2) + metrics.getAscent();
                 g.setFont(font);
+                g.setColor(new Color(0, 0, 0, 255));
+                g.drawString(((Text)b).text, x + 3, y + 3);
+                g.setColor(new Color(255, 255, 255, 255));
                 g.drawString(((Text)b).text, x, y);
             }
         });
@@ -108,12 +113,13 @@ public class GUI {
 
     //checks intersect of the button, presses it if press is enabled
     boolean checkIntersect(Button b, boolean press, float x, float y){
-        float xmin = b.x - b.width/2, ymin = b.y - b.height/2, 
-            xmax = xmin + b.width, ymax = xmin + b.height;
+        float xmin = b.x - (b.width/2.0f), ymin = b.y - (b.height/2.0f), 
+            xmax = xmin + b.width, ymax = ymin + b.height;
         boolean isx = x < xmax && x > xmin;
         boolean isy = y < ymax && y > ymin;
         if(isx && isy){
             if(press) b.bi.onClick();
+            //System.out.println(xmax + "," + ymax + " || " + x + ", " + y + " || " + press);
             return true;
         }
         return false;

@@ -113,6 +113,11 @@ public class TableRenderer {
         for(int i = 0; i < p.money; i++){
             drawChip(g, 0, 60 + ((i/7) * 50), -70 + ((i % 7) * 15), 50);
         }
+
+        if(!p.playing){
+            g.fillRect(0, 0, 100, 5);
+        }
+
         g.setTransform(bt);
     }
 

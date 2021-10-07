@@ -47,20 +47,23 @@ public class GraphicsTable extends Table {
 
     @Override
     protected void printEnd(Player winner){
+        Thread main = Thread.currentThread();
+
         gui.queueText(winner.name + " wins $" + pot, 0.5f, 0.3f, 0.02f, 0.2f);
-        boolean goforth = false;
         gui.queueButton(
             "Play Again", 
             0.5f, 0.5f, 0.1f, 0.1f,
-            () -> {gui.applyQueue();}
+            () -> { main.interrupt(); gui.applyQueue();}
         );
         gui.queueButton(
             "Quit", 
             0.5f, 0.65f, 0.1f, 0.1f,
-            () -> { System.exit(0); }
+            () -> { main.interrupt(); System.exit(0); }
         );
         gui.applyQueue();
 
-        while(!goforth){System.out.println("");};
+        try {
+            main.sleep(Long.MAX_VALUE); //sleeps for 292.5 billion years
+        } catch (InterruptedException e) {}
     }
 }
