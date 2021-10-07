@@ -12,6 +12,8 @@ public class Window {
 
         int panewidth = 1440, paneheight = 720;
 
+        Point mouse_loc;
+
         boolean renderGame;
 
         GraphicsTable tr;
@@ -36,7 +38,11 @@ public class Window {
             g.setColor(new Color(0.1f, 0.3f, 0.1f));
             g.fillRect(0, 0, panewidth, paneheight);
             if(renderGame) tr.Render(g);
-            interact.render(g, panewidth, paneheight);
+            Point p = MouseInfo.getPointerInfo().getLocation();
+            Point o = this.getLocationOnScreen();
+            float mousex = (float)(p.getX() - o.getX()) / panewidth, 
+                mousey = (float)(p.getY() - o.getY()) / paneheight;
+            interact.render(g, panewidth, paneheight, mousex, mousey);
         }
 
         public void run() {
@@ -53,6 +59,7 @@ public class Window {
     GraphicPanel g;
     GraphicsTable tr;
     GUI gui;
+    long start = System.currentTimeMillis();
 
     public Window(){
         mainwindow = new JFrame("Poker");

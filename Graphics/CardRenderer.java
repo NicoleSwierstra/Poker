@@ -17,7 +17,7 @@ public class CardRenderer {
         //loads cards atlas into a buffered image
         BufferedImage atlas;
         try {
-            atlas = ImageIO.read(new File("res/cards.png"));
+            atlas = ImageIO.read(new File("res/tex/cards.png"));
         } catch (IOException e) {
             atlas = null;
             System.out.println("FAIL");

@@ -4,10 +4,11 @@ import GameLogic.*;
 
 public class TurnGUI {
     Player player;
-    boolean endturn = false;
+    Thread main;
 
     public TurnGUI(Player p) {
         player = p;
+        main = Thread.currentThread();
     }
     
     //to queue the turn GUI
@@ -18,7 +19,7 @@ public class TurnGUI {
             0.375f, 0.5f, 0.1f, 0.1f,
             () -> {
                 player.playing = false;
-                this.endturn = true;
+                main.interrupt();
             }
         );
         gui.queueButton(
@@ -26,7 +27,7 @@ public class TurnGUI {
             0.5f, 0.5f, 0.1f, 0.1f,
             () -> {
                 player.bet(player.deficit);
-                this.endturn = true;
+                main.interrupt();
             }
         );
         gui.queueButton(
@@ -34,7 +35,7 @@ public class TurnGUI {
             0.6f, 0.5f, 0.05f, 0.1f,
             () -> {
                 player.bet(player.deficit + 1);
-                this.endturn = true;
+                main.interrupt();
             }
         );
         gui.queueButton(
@@ -42,7 +43,7 @@ public class TurnGUI {
             0.675f, 0.5f, 0.05f, 0.1f,
             () -> {
                 player.bet(player.deficit + 2);
-                this.endturn = true;
+                main.interrupt();
             }
         );
         gui.applyQueue();
@@ -55,9 +56,9 @@ public class TurnGUI {
             () -> {gt.showCards = true; turnGui(gui);}
         );
         gui.applyQueue();
-        while(!endturn){
-            System.out.println(endturn);
-        }
+        try {
+            main.sleep(Long.MAX_VALUE); //sleeps for 292.5 billion years
+        } catch (InterruptedException e) {}
         gt.showCards = false;
     }
 }
