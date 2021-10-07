@@ -50,7 +50,7 @@ public class GUI {
     }
 
     //on mouse checks intersect
-    void onMouse(float x, float y){
+    void                                                                                                                                                                                                                                                                                                                                    onMouse(float x, float y){
         Elements.forEach(b -> {
             if(b instanceof Button)
                 checkIntersect((Button)b, true, x, y);
