@@ -65,7 +65,7 @@ public class TableRenderer {
         cr = new CardRenderer();
         win = w;
         try {
-            chip = ImageIO.read(new File("res/chip.png"));
+            chip = ImageIO.read(new File("res/tex/chip.png"));
         } catch (IOException e) {
             System.out.println("FAIL");
         }
