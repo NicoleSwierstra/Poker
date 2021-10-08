@@ -1,5 +1,5 @@
 package GameLogic;
-class handValue{
+public class handValue{
     public int highcard, value;
     handValue(int high, int value){
         this.value = value;

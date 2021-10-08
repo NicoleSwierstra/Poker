@@ -49,15 +49,21 @@ public class GraphicsTable extends Table {
     protected void printEnd(Player winner){
         Thread main = Thread.currentThread();
 
-        gui.queueText(winner.name + " wins $" + pot, 0.5f, 0.3f, 0.02f, 0.2f);
+        for(int i = 0; i < players.size(); i++){
+            int hc = players.get(i).handvalue().highcard, 
+                v = players.get(i).handvalue().value;
+            System.out.println(players.get(i).name + ", highcard: " + hc + ", value:" + v);
+        }
+
+        gui.queueText(winner.name + " wins $" + pot, 0.5f, 0.3f, 0.02f, 0.1f);
         gui.queueButton(
             "Play Again", 
-            0.5f, 0.5f, 0.1f, 0.1f,
+            0.5f, 0.5f, 0.3f, 0.1f,
             () -> { main.interrupt(); gui.applyQueue();}
         );
         gui.queueButton(
             "Quit", 
-            0.5f, 0.65f, 0.1f, 0.1f,
+            0.5f, 0.65f, 0.3f, 0.1f,
             () -> { main.interrupt(); System.exit(0); }
         );
         gui.applyQueue();

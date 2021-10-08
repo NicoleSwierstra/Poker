@@ -11,7 +11,7 @@ public class GraphicsGame {
 
         w.gui.queueButton(
             "Start", 
-            0.5f, 0.5f, 0.1f, 0.1f,
+            0.5f, 0.5f, 0.3f, 0.1f,
             () -> {
                 w.gui.applyQueue();
                 t.interrupt();
@@ -19,7 +19,7 @@ public class GraphicsGame {
         );
         w.gui.queueButton(
             "Quit", 
-            0.5f, 0.65f, 0.1f, 0.1f,
+            0.5f, 0.65f, 0.3f, 0.1f,
             () -> {
                 w.mainwindow.setVisible(false);
                 t.interrupt();

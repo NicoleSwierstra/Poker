@@ -115,7 +115,12 @@ public class TableRenderer {
         }
 
         if(!p.playing){
-            g.fillRect(0, 0, 100, 5);
+            g.setColor(Color.RED);
+            Stroke s = g.getStroke();
+            g.setStroke(new BasicStroke(5));
+            g.drawLine(-150, -70,  150, 70);
+            g.drawLine( 150, -70, -150, 70);
+            g.setStroke(s);
         }
 
         g.setTransform(bt);

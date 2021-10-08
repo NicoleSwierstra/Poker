@@ -100,7 +100,7 @@ public class Player {
         hand_sorted.forEach(card -> {card.print();});
 
         int highest = 0;
-        int highcard = hand_sorted.get(6).num;
+        int highcard = Math.max(hand.get(0).num, hand.get(1).num);
         for(int i = 0; i < 3; i++){
             int newvalue = evaluate5(hand_sorted.subList(i, i + 5));
             if(newvalue > highest)

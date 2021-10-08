@@ -3,10 +3,7 @@ package Graphics;
 import java.util.List;
 
 import java.util.ArrayList;
-import java.awt.Graphics;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
+import java.awt.*;
 
 public class GUI {
     public class GUIElement{
@@ -78,6 +75,9 @@ public class GUI {
 
     //renders all buttons, and render the moused over button specially
     void render(Graphics g, int width, int height, float xmouse, float ymouse){
+        Graphics2D g2d = (Graphics2D) g;
+        Stroke s = g2d.getStroke();
+        g2d.setStroke(new BasicStroke(1.5f));
         //render button
         Elements.forEach(b -> {
             g.setColor(new Color(255, 255, 255, 125));
@@ -90,9 +90,9 @@ public class GUI {
                 if(checkIntersect((Button)b, false, xmouse, ymouse)) 
                     g.setColor(new Color(255, 0, 0, 125));
                 
-                g.fillRect(xmin, ymin, bw, bh);
+                g2d.fillRoundRect(xmin, ymin, bw, bh, 10, 10);
                 g.setColor(new Color(0, 0, 0));
-                g.drawRect(xmin, ymin, bw, bh);
+                g2d.drawRoundRect(xmin, ymin, bw, bh, 10, 10);
 
                 int x = xmin + (bw - metrics.stringWidth(((Button)b).label)) / 2;
                 int y = ymin + ((bh - metrics.getHeight()) / 2) + metrics.getAscent();
@@ -108,11 +108,12 @@ public class GUI {
                 g.setFont(font);
                 g.setColor(new Color(0, 0, 0, 255));
                 g.drawString(((Text)b).text, x + 3, y + 3);
-                float time = ((starttime - System.currentTimeMillis()) / 1000.0f);
+                float time = ((starttime - System.currentTimeMillis()) / 4000.0f);
                 g.setColor(Color.getHSBColor(time % 1.0f, 1.0f, 0.5f));
                 g.drawString(((Text)b).text, x, y);
             }
         });
+        g2d.setStroke(s);
     }
 
     //checks intersect of the button, presses it if press is enabled
