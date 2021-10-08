@@ -1,6 +1,7 @@
 package Graphics;
 
 import java.util.List;
+
 import java.util.ArrayList;
 import java.awt.Graphics;
 import java.awt.Color;
@@ -41,12 +42,14 @@ public class GUI {
     //the important part
     public List<GUIElement> Elements;
     public List<GUIElement> eQueue;
+    long starttime;
 
     public interface ButtonInterface {void onClick();}
 
     GUI(){
         Elements = new ArrayList<GUIElement>();
         eQueue =  new ArrayList<GUIElement>();
+        starttime = System.currentTimeMillis();
     }
 
     //on mouse checks intersect
@@ -105,7 +108,8 @@ public class GUI {
                 g.setFont(font);
                 g.setColor(new Color(0, 0, 0, 255));
                 g.drawString(((Text)b).text, x + 3, y + 3);
-                g.setColor(new Color(255, 255, 255, 255));
+                float time = ((starttime - System.currentTimeMillis()) / 1000.0f);
+                g.setColor(Color.getHSBColor(time % 1.0f, 1.0f, 0.5f));
                 g.drawString(((Text)b).text, x, y);
             }
         });
@@ -118,8 +122,10 @@ public class GUI {
         boolean isx = x < xmax && x > xmin;
         boolean isy = y < ymax && y > ymin;
         if(isx && isy){
-            if(press) b.bi.onClick();
-            //System.out.println(xmax + "," + ymax + " || " + x + ", " + y + " || " + press);
+            if(press) {
+                b.bi.onClick();
+                SoundEngine.playSound("res/aud/vineboom.wav");
+            }
             return true;
         }
         return false;

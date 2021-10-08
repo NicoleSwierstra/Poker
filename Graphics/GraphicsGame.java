@@ -59,7 +59,7 @@ public class GraphicsGame {
         );
         w.gui.queueButton(
             "6", 
-            0.6f, 0.67f, 0.15f + (System.currentTimeMillis() - w.start) * 0.000001f, 0.1f,
+            0.6f, 0.67f, 0.15f + (System.currentTimeMillis() - w.start) * 0.000005f, 0.1f,
             () -> {playerNumber = 6; t.interrupt();}
         );
         w.gui.applyQueue();
