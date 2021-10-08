@@ -97,8 +97,6 @@ public class Player {
             }
         }
 
-        hand_sorted.forEach(card -> {card.print();});
-
         int highest = 0;
         int highcard = Math.max(hand.get(0).num, hand.get(1).num);
         for(int i = 0; i < 3; i++){
