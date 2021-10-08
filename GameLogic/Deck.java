@@ -5,13 +5,13 @@ public class Deck {
     List<Card> cards;
     static Random rand;
 
-    Deck(){
+    public Deck(){
         rand = new Random();
         reset();
     }
     
     //shuffling and generating the deck are the same thing
-    void reset(){
+    public void reset(){
         cards = new ArrayList<Card>();
         for(int i = 0; i < 4; i++){
             for (int j = 0; j < 13; j++){
