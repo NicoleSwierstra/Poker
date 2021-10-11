@@ -125,7 +125,6 @@ public class GUI {
         if(isx && isy){
             if(press) {
                 b.bi.onClick();
-                SoundEngine.playSound("res/aud/vineboom.wav");
             }
             return true;
         }
