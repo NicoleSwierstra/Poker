@@ -41,7 +41,6 @@ public class Card {
             default:
                 n = (num + 1) + "  ";
         }
-
         return color + s + footer + n;
     }
 }

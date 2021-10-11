@@ -12,7 +12,7 @@ public class Main{
     for(int j = 0; j < 1000; j++){
       test.reset();
     for(int i = 0; i < 7; i++){
-      List<Card> temp = test.copyAndRemove(1);
+      List<Card> temp = test.copyAndRemove(1).get(0);
       num[i] = temp.get(0).num;
       suit[i] = temp.get(0).suit;
       temp.get(0).print();
