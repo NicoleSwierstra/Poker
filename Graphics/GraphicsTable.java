@@ -47,14 +47,9 @@ public class GraphicsTable extends Table {
 
     @Override
     protected void printEnd(Player winner){
+        SoundEngine.playSound("res/aud/ohmygod.wav");
+        
         Thread main = Thread.currentThread();
-
-        for(int i = 0; i < players.size(); i++){
-            int hc = players.get(i).handvalue().highcard, 
-                v = players.get(i).handvalue().value;
-            System.out.println(players.get(i).name + ", highcard: " + hc + ", value:" + v);
-        }
-
         gui.queueText(winner.name + " wins $" + pot, 0.5f, 0.3f, 0.02f, 0.1f);
         gui.queueButton(
             "Play Again", 
