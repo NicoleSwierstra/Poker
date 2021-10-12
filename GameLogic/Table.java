@@ -18,10 +18,8 @@ public class Table {
         reset();
         scanner = new Scanner(System.in);
     }
-
     //resets the table
     void reset() {
-        deck.reset();
         pot = 0;
     }
 
@@ -32,7 +30,7 @@ public class Table {
 
     //deals from the deck to a player
     void dealToPlayer(int pnum){
-        players.get(pnum).dealTo(deck.copyAndRemove(2));
+       
     }
 
     //starts the game
@@ -42,7 +40,6 @@ public class Table {
         for(int i = 0; i < players.size(); i++){
             dealToPlayer(i);
         }
-        community = deck.copyAndRemove(5);
     }
 
     //runs a game, which is defined as a single deal

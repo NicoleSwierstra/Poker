@@ -14,13 +14,8 @@ public class Card {
         System.out.print(getPrintString());
     }
 
-    public void print(PrintStream dest){
-        dest.print(getPrintString());
-    }
-
-    String getPrintString(){
-        String color = (suit == 1 || suit == 2) ? "\033[31;40m" : "\033[30;47m", 
-            footer = "\033[0;0m", n;
+    public String getPrintString(){
+        String color = (suit == 1 || suit == 2) ? "\033[31;40m" : "\033[30;47m", footer = "\033[0;0m", n;
         char s = (char)('♠' + suit);
         switch(num){
             case 0:
