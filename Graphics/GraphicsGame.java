@@ -1,5 +1,6 @@
 package Graphics;
 
+import GameLogic.Player;
 import Networking.PlayerProfiles.LocalManager;
 import Networking.PlayerProfiles.PlayerProfile;
 
@@ -63,7 +64,9 @@ public class GraphicsGame {
     }
 
     public GraphicsGame(){
-        currentPlayer = LocalManager.LoadDefault();
+        LocalManager lm = new LocalManager();
+
+        currentPlayer = lm.LoadDefault();
         
         w = new Window();
         mode = _mode.MAIN;
@@ -74,10 +77,12 @@ public class GraphicsGame {
             w.g.renderGame = false;  
             switch(mode){
                 case GAME:
-                    PlayerSelect.playerMenu(w.gui);
-                    for(int i = 0; i < PlayerSelect.playerNumber; i++){
-                        w.tr.addPlayer("Player " + (i + 1));
+                    PlayerSelect psel = new PlayerSelect();
+                    psel.playerMenu(w.gui, lm);
+                    for(int i = 0; i < psel.profiles.size(); i++){
+                        w.tr.addPlayer(psel.profiles.get(i));
                     }
+                    System.out.println("h");
                     w.g.renderGame = true;  
                     while(true){
                         w.tr.game();

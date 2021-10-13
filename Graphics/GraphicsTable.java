@@ -1,16 +1,21 @@
 package Graphics;
 
 import GameLogic.*;
+import Networking.PlayerProfiles.PlayerProfile;
+
 import java.awt.Graphics;
+import java.util.*;
 
 public class GraphicsTable extends Table {
     TableRenderer tr;
     GUI gui;
     Window win;
     boolean showCards = true;
+    List<PlayerProfile> profiles;
 
     GraphicsTable(Window win, GUI gui){
         super();
+        profiles = new ArrayList<PlayerProfile>();
         tr = new TableRenderer(win);
         this.win = win;
         this.gui = gui;
@@ -22,6 +27,11 @@ public class GraphicsTable extends Table {
 
     void Render(Graphics g){
         tr.Render(g, pot, community, players, com_turnover, showCards ? turn : -1, end);
+    }
+
+    public void addPlayer(PlayerProfile pp){
+        addPlayer(pp.username);
+        profiles.add(pp);
     }
 
     @Override

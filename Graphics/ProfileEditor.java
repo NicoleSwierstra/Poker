@@ -15,7 +15,7 @@ public class ProfileEditor {
 
     static void PlayerProfileEdit(GUI gui, GraphicsGame graphicsGame) {
         Thread t = Thread.currentThread();
-        ppf = LocalManager.LoadDefault();
+        ppf = graphicsGame.currentPlayer;
         GUI.TextBox namebox = gui.queueTextBox(ppf.username, 0.35f, 0.3f, 0.3f, 0.1f);
         GUI.Texture avitex = gui.queueTexture(ppf.avatar, 0.65f, 0.35f, 0.2f, 0.2f);
         gui.queueText("Edit profile:", 0.35f, 0.15f, 0.2f, 0.1f);

@@ -1,37 +1,55 @@
 package Graphics;
 
+import java.util.List;
+import java.util.ArrayList;
+
+import Graphics.GUI.ButtonInterface;
+import Networking.PlayerProfiles.LocalManager;
+import Networking.PlayerProfiles.PlayerProfile;
+
 public class PlayerSelect {
-    static int playerNumber = 0;
+    List<PlayerProfile> profiles;
+    GUI.GUIList guilist;
+
+    PlayerSelect(){
+        profiles = new ArrayList<PlayerProfile>();
+    }
+
+    //shows a list of all players, and "greys out" the already gaming ones
+    void profileSelect(GUI gui, LocalManager lm){
+        gui.saveGUI();
+        int i;
+        for(i = 0; i < lm.profiles.size(); i++){
+            PlayerProfile ppf = lm.profiles.get(i);
+            if (!profiles.contains(ppf)) {
+                ButtonInterface bi = () -> {
+                    profiles.add(ppf);
+                    //guilist.addText("", x, y, width, height);;
+                    gui.applyOld();
+                };
+                gui.queueButton(ppf.username, 0.5f, 0.2f + (0.1f * i), 0.1f, 0.08f, bi);
+            }
+            else gui.queueText(ppf.username, 0.5f, 0.2f + (0.1f * i), 0.1f, 0.04f);
+        }
+        gui.queueButton("Back", 0.5f, 0.2f + (0.1f * i), 0.1f, 0.08f, () -> {gui.applyOld();});
+        gui.applyQueue();
+    }
 
     //if anyone touches this i am defenestrating them
-    static void playerMenu(GUI gui){
+    void playerMenu(GUI gui, LocalManager lm){
         Thread t = Thread.currentThread();
-
-        gui.queueText("# of players", 0.5f, 0.3f, 0.2f, 0.2f);
+        guilist = gui.queueList(false, 1, 0.1f, 0.5f, 0.35f, 0.1f, 0.08f);
+        
+        gui.queueText("Select Players", 0.5f, 0.15f, 0.2f, 0.05f);
         gui.queueButton(
-            "2", 
-            0.5f, 0.49f, 0.05f, 0.1f,
-            () -> {playerNumber = 2; t.interrupt();}
+            "+", 
+            0.45f, 0.25f, 0.05f, 0.1f,
+            () -> { profileSelect(gui, lm);}
         );
         gui.queueButton(
-            "3", 
-            0.6f, 0.51f, 0.05f, 0.1f,
-            () -> {playerNumber = 3; t.interrupt();}
-        );
-        gui.queueButton(
-            "4", 
-            0.4f, 0.66f, 0.08f, 0.1f,
-            () -> {playerNumber = 4; t.interrupt();}
-        );
-        gui.queueButton(
-            "5", 
-            0.5f, 0.64f, 0.1f, 0.1f,
-            () -> {playerNumber = 5; t.interrupt();}
-        );
-        gui.queueButton(
-            "6", 
-            0.6f, 0.67f, 0.25f, 0.1f,
-            () -> {playerNumber = 6; t.interrupt();}
+            "accept", 
+            0.55f, 0.25f, 0.05f, 0.1f,
+            () -> {t.interrupt();}
         );
         gui.applyQueue();
         try {
