@@ -58,7 +58,7 @@ public class Window {
     }
 
     JFrame mainwindow;
-    GraphicPanel g;
+    static GraphicPanel g;
     GraphicsTable tr;
     GUI gui;
     long start = System.currentTimeMillis();

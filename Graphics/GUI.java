@@ -55,12 +55,22 @@ public class GUI {
     }
 
     class TextBox extends GUIElement {
-        String field = "";
+        String field;
 
-        TextBox(float x, float y, float width, float height){
+        TextBox(String text, float x, float y, float width, float height){
             super(x, y, width, height);
+            field = text;
         }
     }
+
+    class Texture extends GUIElement{
+        BufferedImage bi;
+        
+        Texture(BufferedImage bi, float x, float y, float width, float height){
+            super(x, y, width, height);
+            this.bi = bi;
+        }
+    };
 
     //the important part
     public List<GUIElement> Elements;
@@ -99,8 +109,13 @@ public class GUI {
     }
 
     //adds a text field
-    void queueTextBox(float x, float y, float width, float height){
-        eQueue.add(new TextBox(x, y, width, height));
+    TextBox queueTextBox(String text, float x, float y, float width, float height){
+        TextBox t = new TextBox(text, x, y, width, height); eQueue.add(t); return t;
+    }
+
+    //adds an image
+    Texture queueTexture(BufferedImage bi, float x, float y, float width, float height){
+        Texture t = new Texture(bi, x, y, width, height); eQueue.add(t); return t;
     }
 
     //clears all buttons
@@ -180,6 +195,10 @@ public class GUI {
                 g.setColor(new Color(0, 0, 0, 255));
                 g.drawString(((TextBox)b).field, x, y);
             }
+
+            if (b instanceof Texture){
+                g.drawImage(((Texture)b).bi, xmin, ymin, bw, bw, null);
+            }
         });
         g2d.setStroke(s);
     }
@@ -205,6 +224,7 @@ public class GUI {
     }
 
     void textInput(KeyEvent e){
+        if (active == null) return;
         char c = e.getKeyChar();
         if(c == KeyEvent.VK_BACK_SPACE){
             if(!(active.field.length() > 0)) return;

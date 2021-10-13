@@ -21,9 +21,10 @@ public class PlayerProfile {
     static byte[] headerstr = {0x50, 0x50, 0x46, 0x30, 0x31, 0x30, 0x30, 0x30};
 
     public BufferedImage avatar;
-    String username;
+    public String username;
     int lifetimeChips;
     int id;
+    File saveFile;
 
     //Default constructor.
     public PlayerProfile(BufferedImage avi, String name, int id, int lifeChips){
@@ -97,7 +98,7 @@ public class PlayerProfile {
     //saves to a new file
     static void saveNewToFile(PlayerProfile pp) throws IOException {
         //TODO: add id
-        File output = new File("res/profiles/" + pp.username);
+        File output = new File("res/profiles/" + pp.username + ".ppf");
         FileOutputStream os = new FileOutputStream(output);
 
         os.write(headerstr);

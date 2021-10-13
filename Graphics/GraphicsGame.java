@@ -1,7 +1,20 @@
 package Graphics;
 
+import Networking.PlayerProfiles.LocalManager;
+import Networking.PlayerProfiles.PlayerProfile;
+
 public class GraphicsGame {
+    enum _mode{
+        MAIN, GAME, PROFILE, ONLINE
+    }
+    _mode mode;
     Window w;
+    PlayerProfile currentPlayer;
+
+    void playerAvi(){
+        w.gui.queueText(currentPlayer.username, 0.2f, 0.05f, 0.1f, 0.08f);
+        w.gui.queueTexture(currentPlayer.avatar, 0.05f, 0.05f, 0.08f, 0.08f);
+    }
 
     public void menu(){
         Thread t = Thread.currentThread();
@@ -12,6 +25,7 @@ public class GraphicsGame {
             "Local", "res/icon/cards.png",
             0.35f, 0.55f, 0.125f, 0.25f,
             () -> {
+                mode = _mode.GAME;
                 w.gui.applyQueue();
                 t.interrupt();
             }
@@ -27,7 +41,8 @@ public class GraphicsGame {
             "Profile", "res/icon/profile.png",
             0.65f, 0.55f, 0.125f, 0.25f,
             () -> {
-                
+                mode = _mode.PROFILE;
+                t.interrupt();
             }
         );
         w.gui.queueButton(
@@ -39,22 +54,47 @@ public class GraphicsGame {
                 System.exit(0);
             }
         );
-        w.gui.queueTextBox(0.5f, 0.9f, 0.3f, 0.1f);
+        playerAvi();
+
         w.gui.applyQueue();
         try {
-            Thread.currentThread().sleep(Long.MAX_VALUE); //sleeps for 292.5 billion years
+            Thread.sleep(Long.MAX_VALUE); //sleeps for 292.5 billion years
         } catch (InterruptedException e) {}
     }
 
     public GraphicsGame(){
+        currentPlayer = LocalManager.LoadDefault();
+        
         w = new Window();
+        mode = _mode.MAIN;
         new Thread(() -> w.start()).start();
         menu();
-        PlayerSelect.playerMenu(w.gui);
-        for(int i = 0; i < PlayerSelect.playerNumber; i++){
-            w.tr.addPlayer("Player " + (i + 1));
+        
+        while(true) {
+            w.g.renderGame = false;  
+            switch(mode){
+                case GAME:
+                    PlayerSelect.playerMenu(w.gui);
+                    for(int i = 0; i < PlayerSelect.playerNumber; i++){
+                        w.tr.addPlayer("Player " + (i + 1));
+                    }
+                    w.g.renderGame = true;  
+                    while(true){
+                        w.tr.game();
+                    }
+                    //break;
+                case MAIN:
+                    menu();
+                    break;
+                case ONLINE:
+                    break;
+                case PROFILE:
+                    ProfileEditor.PlayerProfileEdit(w.gui, this);
+                    mode = _mode.MAIN;
+                    break;
+                default:
+                    break;
+            }
         }
-        w.g.renderGame = true; 
-        while(true) w.tr.game();
     }
 }
