@@ -30,6 +30,8 @@ public class Window {
                     panewidth = pane.getWidth();
                 }
             });
+            setFocusTraversalKeysEnabled(false);
+            setFocusable(true);
         }
 
         @Override
@@ -93,6 +95,16 @@ public class Window {
             public void mouseEntered(MouseEvent e) {}
             @Override
             public void mouseExited(MouseEvent e) {}
+        });
+        g.addKeyListener(new KeyListener(){
+            @Override
+            public void keyTyped(KeyEvent e) {}
+            @Override
+            public void keyPressed(KeyEvent e) {
+                gui.textInput(e);
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {}
         });
     }
 }
