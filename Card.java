@@ -41,5 +41,8 @@ public class Card{
   public String letOrNum(){
     return this.letOrNum;
   }
+  public String fullValue(){
+    return this.fullValue;
+  }
 
 }
