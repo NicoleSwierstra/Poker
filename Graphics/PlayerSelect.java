@@ -24,7 +24,11 @@ public class PlayerSelect {
             if (!profiles.contains(ppf)) {
                 ButtonInterface bi = () -> {
                     profiles.add(ppf);
-                    //guilist.addText("", x, y, width, height);;
+                    guilist.addButton(ppf.username, () -> {
+                        System.out.println(profiles.indexOf(ppf));
+                        guilist.removeElement(profiles.indexOf(ppf));
+                        profiles.remove(ppf);
+                    });
                     gui.applyOld();
                 };
                 gui.queueButton(ppf.username, 0.5f, 0.2f + (0.1f * i), 0.1f, 0.08f, bi);
@@ -43,17 +47,22 @@ public class PlayerSelect {
         gui.queueText("Select Players", 0.5f, 0.15f, 0.2f, 0.05f);
         gui.queueButton(
             "+", 
-            0.45f, 0.25f, 0.05f, 0.1f,
+            0.425f, 0.25f, 0.06f, 0.1f,
             () -> { profileSelect(gui, lm);}
         );
         gui.queueButton(
+            "back", 
+            0.5f, 0.25f, 0.06f, 0.1f,
+            () -> {profiles.clear();t.interrupt();}
+        );
+        gui.queueButton(
             "accept", 
-            0.55f, 0.25f, 0.05f, 0.1f,
+            0.575f, 0.25f, 0.06f, 0.1f,
             () -> {t.interrupt();}
         );
         gui.applyQueue();
         try {
-            Thread.currentThread().sleep(Long.MAX_VALUE); //sleeps for 292.5 billion years
+            Thread.sleep(Long.MAX_VALUE); //sleeps for 292.5 billion years
         } catch (InterruptedException e) {}
     }
 }

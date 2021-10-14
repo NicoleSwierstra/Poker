@@ -13,7 +13,7 @@ import java.io.IOException;
 public class ProfileEditor {
     static PlayerProfile ppf;
 
-    static void PlayerProfileEdit(GUI gui, GraphicsGame graphicsGame) {
+    static void PlayerProfileEdit(GUI gui, GraphicsGame graphicsGame, Window win) {
         Thread t = Thread.currentThread();
         ppf = graphicsGame.currentPlayer;
         GUI.TextBox namebox = gui.queueTextBox(ppf.username, 0.35f, 0.3f, 0.3f, 0.1f);
@@ -25,7 +25,7 @@ public class ProfileEditor {
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "Images", "jpg", "gif", "png", "bmp");
             chooser.setFileFilter(filter);
-            int returnVal = chooser.showOpenDialog(Window.g);
+            int returnVal = chooser.showOpenDialog(win.g);
             if(returnVal == JFileChooser.APPROVE_OPTION) {
                 try {
                     BufferedImage source = ImageIO.read(chooser.getSelectedFile()),
@@ -40,7 +40,7 @@ public class ProfileEditor {
         });
         gui.queueButton("Save", 0.25f, 0.6f, 0.1f, 0.1f, () -> {
             ppf.username = namebox.field;
-            ppf.saveToFile();
+            ppf.save();
             graphicsGame.currentPlayer = ppf;
             t.interrupt();
         });
@@ -51,7 +51,7 @@ public class ProfileEditor {
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "Player Profile Files", "ppf");
             chooser.setFileFilter(filter);
-            int returnVal = chooser.showOpenDialog(Window.g);
+            int returnVal = chooser.showOpenDialog(win.g);
             if(returnVal == JFileChooser.APPROVE_OPTION) {
                 ppf = new PlayerProfile(chooser.getSelectedFile().getPath());
                 namebox.field = ppf.username;

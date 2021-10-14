@@ -7,8 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import GameLogic.Player;
-
 /** Player profile file:
  *  x50 x50 x46 x00 | x00 x00 x00 x00 <- Header and spare bytes
  *  id, 4 bytes     | Name ->>>>> x00
@@ -36,7 +34,7 @@ public class PlayerProfile {
 
     //alternate constructor, probably useful later
     public PlayerProfile(final String location){
-        loadFromFile(location);
+        load(location);
     }
 
     private void copyTo(PlayerProfile ppf){
@@ -47,22 +45,25 @@ public class PlayerProfile {
     }
     
     //loads from a file
-    void loadFromFile(final String location){
+    void load(final String location){
         try {
-            copyTo(loadNewFromFile(location));
+            saveFile = new File(location);
+            copyTo(loadNewFromFile(saveFile));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     
-    public void saveToFile(){
-        try{saveNewToFile(this);}
+    public void save(){
+        try{
+            if(saveFile == null) saveNewToFile(this);
+            else saveOldToFile(this, saveFile);
+        }
         catch(IOException h){h.printStackTrace();}
     }
 
     //loading from file
-    static PlayerProfile loadNewFromFile(final String location) throws IOException{
-        File filein = new File(location);
+    static PlayerProfile loadNewFromFile(File filein) throws IOException{
         FileInputStream in = new FileInputStream(filein);
 
         BufferedImage avi = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
@@ -90,14 +91,19 @@ public class PlayerProfile {
 
         int[] ints = byteArrayToIntArray(in.readNBytes(262144));
         avi.setRGB(0, 0, 256, 256, ints, 0, 256);
-
+        in.close();
         PlayerProfile pp = new PlayerProfile(avi, name, id, chips);
         return pp;
     }
     
     //saves to a new file
+    static void saveOldToFile(PlayerProfile pp, File old) throws IOException {
+        saveNewToFile(pp);
+        old.delete();
+    }
+    
+    //saves to a new file
     static void saveNewToFile(PlayerProfile pp) throws IOException {
-        //TODO: add id
         File output = new File("res/profiles/" + pp.username + ".ppf");
         FileOutputStream os = new FileOutputStream(output);
 

@@ -29,7 +29,9 @@ public class LocalManager {
             Scanner s = new Scanner(fin);
             name = s.nextLine();
             s.close();
+            System.out.println(name);
             for(PlayerProfile p : profiles){
+                System.out.println(p.username);
                 if(p.username.startsWith(name))
                     return p;
             }

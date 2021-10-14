@@ -83,29 +83,40 @@ public class GUI {
             this.horizontal = horizontal;
             this.rows = rows;
             this.spacing = spacing;
+            list = new ArrayList<GUIElement>();
         }
 
         List<GUIElement> getList(){
             return list;
         }
 
+        void removeElement(int element){
+            list.remove(element);
+            for(int i = element; i < list.size(); i++){
+                float xx = (horizontal) ? x + (spacing * i) : x,
+                    yy = (horizontal) ? y : y + (spacing * i);
+                list.get(i).x = xx;
+                list.get(i).y = yy;
+            }
+        }
+
         //adds a button
         void addButton(String label, ButtonInterface bi){
-            float xx = (!horizontal) ? x + (spacing * list.size()) : x,
+            float xx = (horizontal) ? x + (spacing * list.size()) : x,
                 yy = (horizontal) ? y : y + (spacing * list.size());
             list.add(new Button(label, xx, yy, width, height, bi));
         }
 
         //adds a text
         void addText(String label){
-            float xx = (!horizontal) ? x + (spacing * list.size()) : x,
+            float xx = (horizontal) ? x + (spacing * list.size()) : x,
                 yy = (horizontal) ? y : y + (spacing * list.size());
             list.add(new Text(label, xx, yy, width, height));
         }
 
         //adds an image
         void addTexture(BufferedImage bi){
-            float xx = (!horizontal) ? x + (spacing * list.size()) : x,
+            float xx = (horizontal) ? x + (spacing * list.size()) : x,
                 yy = (horizontal) ? y : y + (spacing * list.size());
             list.add(new Texture(bi, xx, yy, width, height));
         }
@@ -131,6 +142,14 @@ public class GUI {
         Elements.forEach(b -> {
             if(b instanceof Button || b instanceof TextBox)
                 checkIntersect(b, true, x, y);
+            else if(b instanceof GUIList) {
+                GUIList h = ((GUIList)b);
+                for(int i = 0; i < h.list.size(); i++){
+                    if(h.list.get(i) instanceof Button){
+                        checkIntersect(h.list.get(i), true, x, y);
+                    }
+                }
+            }
         });
     }
 
@@ -179,8 +198,6 @@ public class GUI {
 
     //renders a button
     void renderButton(Graphics g, Button b, int xmin, int ymin, int bw, int bh, float xmouse, float ymouse){
-        Font font = new Font("Comic Sans MS", 0, bh/2);
-        FontMetrics metrics = g.getFontMetrics(font);
         if(checkIntersect((Button)b, false, xmouse, ymouse)) 
             g.setColor(new Color(255, 0, 0, 125));
         
@@ -189,6 +206,8 @@ public class GUI {
         ((Graphics2D)g).drawRoundRect(xmin, ymin, bw, bh, 10, 10);
 
         if(b instanceof IconButton){
+            Font font = new Font("Comic Sans MS", 0, bh/10);
+            FontMetrics metrics = g.getFontMetrics(font);
             int x = xmin + (bw - metrics.stringWidth(((Button)b).label)) / 2;
             int y = ymin + metrics.getAscent() + ((5 * bh)/6);
             g.setFont(font);
@@ -196,6 +215,8 @@ public class GUI {
             g.drawImage(((IconButton)b).icon, xmin, ymin, bw, (7 * bh)/8, null);
         }
         else {
+            Font font = new Font("Comic Sans MS", 0, bh/3);
+            FontMetrics metrics = g.getFontMetrics(font);
             int x = xmin + (bw - metrics.stringWidth(((Button)b).label)) / 2;
             int y = ymin + ((bh - metrics.getHeight()) / 2) + metrics.getAscent();
             g.setFont(font);
@@ -241,6 +262,7 @@ public class GUI {
     }
 
     void renderGUIlist(Graphics g, GUIList l, int width, int height, float xmouse, float ymouse){
+        if(l.list.size() == 0) return;
         l.list.forEach(b -> {
             renderElement(g, b, width, height, xmouse, ymouse);
         });
@@ -251,7 +273,9 @@ public class GUI {
             ymin = (int)(b.y * height) - (int)(b.height * height)/2, 
             bw = (int)(b.width * width), 
             bh = (int)(b.height * height);
-
+        
+        g.setColor(new Color(255, 255, 255, 125));
+        
         if (b instanceof Button)
             renderButton(g, (Button)b, xmin, ymin, bw, bh, xmouse, ymouse);
         else if (b instanceof Text)
@@ -271,7 +295,6 @@ public class GUI {
         g2d.setStroke(new BasicStroke(1.5f));
         //render button
         Elements.forEach(b -> {
-            g.setColor(new Color(255, 255, 255, 125));
             renderElement(g, b, width, height, xmouse, ymouse);
         });
         g2d.setStroke(s);

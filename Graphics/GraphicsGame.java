@@ -1,6 +1,5 @@
 package Graphics;
 
-import GameLogic.Player;
 import Networking.PlayerProfiles.LocalManager;
 import Networking.PlayerProfiles.PlayerProfile;
 
@@ -13,7 +12,7 @@ public class GraphicsGame {
     PlayerProfile currentPlayer;
 
     void playerAvi(){
-        w.gui.queueText(currentPlayer.username, 0.2f, 0.05f, 0.1f, 0.08f);
+        w.gui.queueText(currentPlayer.username, 0.05f, 0.2f, 0.1f, 0.03f);
         w.gui.queueTexture(currentPlayer.avatar, 0.05f, 0.05f, 0.08f, 0.08f);
     }
 
@@ -79,14 +78,15 @@ public class GraphicsGame {
                 case GAME:
                     PlayerSelect psel = new PlayerSelect();
                     psel.playerMenu(w.gui, lm);
+                    if (psel.profiles.size() == 0) {
+                        mode = _mode.MAIN;
+                        continue;
+                    }
                     for(int i = 0; i < psel.profiles.size(); i++){
                         w.tr.addPlayer(psel.profiles.get(i));
                     }
-                    System.out.println("h");
                     w.g.renderGame = true;  
-                    while(true){
-                        w.tr.game();
-                    }
+                    while(true) w.tr.game();
                     //break;
                 case MAIN:
                     menu();
@@ -94,7 +94,7 @@ public class GraphicsGame {
                 case ONLINE:
                     break;
                 case PROFILE:
-                    ProfileEditor.PlayerProfileEdit(w.gui, this);
+                    ProfileEditor.PlayerProfileEdit(w.gui, this, w);
                     mode = _mode.MAIN;
                     break;
                 default:

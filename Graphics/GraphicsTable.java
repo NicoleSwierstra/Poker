@@ -26,7 +26,7 @@ public class GraphicsTable extends Table {
     }
 
     void Render(Graphics g){
-        tr.Render(g, pot, community, players, com_turnover, showCards ? turn : -1, end);
+        tr.Render(g, pot, community, players, profiles, com_turnover, showCards ? turn : -1, end);
     }
 
     public void addPlayer(PlayerProfile pp){
@@ -74,7 +74,7 @@ public class GraphicsTable extends Table {
         gui.applyQueue();
 
         try {
-            main.sleep(Long.MAX_VALUE); //sleeps for 292.5 billion years
+            Thread.sleep(Long.MAX_VALUE); //sleeps for 292.5 billion years
         } catch (InterruptedException e) {}
     }
 }

@@ -58,7 +58,7 @@ public class TurnGUI {
         );
         gui.applyQueue();
         try {
-            main.sleep(Long.MAX_VALUE); //sleeps for 292.5 billion years
+            Thread.sleep(Long.MAX_VALUE); //sleeps for 292.5 billion years
         } catch (InterruptedException e) {}
         gt.showCards = false;
     }
