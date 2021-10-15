@@ -8,6 +8,7 @@ public class Card {
     public Card(int suit, int num){
         this.suit = (byte)suit;
         this.num = (byte)num;
+        //test
     }
 
     public void print(){
