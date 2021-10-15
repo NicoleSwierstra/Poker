@@ -57,6 +57,8 @@ public class ProfileEditor {
         GUI.Texture avitex = gui.queueTexture(ppf.avatar, 0.65f, 0.35f, 0.2f, 0.2f);
         gui.queueText("Edit profile:", 0.35f, 0.15f, 0.2f, 0.1f);
 
+        gui.queueText("Lifetime chips: " + ppf.lifetimeChips, 0.35f, 0.45f, 0.2f, 0.05f);
+
         gui.queueButton("Set AVI", 0.65f, 0.15f, 0.1f, 0.1f, ()->{
             JFileChooser chooser = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -67,7 +69,12 @@ public class ProfileEditor {
                 try {
                     BufferedImage source = ImageIO.read(chooser.getSelectedFile()),
                         dest = new BufferedImage(256, 256, 2);
-                    dest.getGraphics().drawImage(source, 0, 0, 256, 256, null);
+                    int w = source.getWidth(), h = source.getHeight();
+                    int sx1 = (w < h) ? 0 : (w / 2) - (h / 2),
+                        sx2 = (w < h) ? w : (w / 2) + (h / 2),
+                        sy1 = (w > h) ? 0 : (h / 2) - (w / 2),
+                        sy2 = (w > h) ? h : (h / 2) + (w / 2);
+                    dest.getGraphics().drawImage(source, 0, 0, 256, 256, sx1, sy1, sx2, sy2, null);
                     ppf.avatar = dest;
                     avitex.bi = dest;
                 } catch (IOException e) {
@@ -107,5 +114,6 @@ public class ProfileEditor {
         try {
             Thread.sleep(Long.MAX_VALUE); //sleeps for 292.5 billion years
         } catch (InterruptedException e) {}
+        graphicsGame.lm.refresh();
     }
 }

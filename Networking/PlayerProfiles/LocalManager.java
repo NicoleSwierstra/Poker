@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class LocalManager {
     public List<PlayerProfile> profiles;
 
-    public LocalManager(){
+    public void refresh(){
         profiles = new ArrayList<PlayerProfile>();
         File dir = new File("res/profiles");
         File [] files = dir.listFiles();
@@ -20,6 +20,10 @@ public class LocalManager {
             System.out.println("Added " + f.getName() + " to profiles");
             profiles.add(new PlayerProfile(f.getPath()));
         }
+    }
+
+    public LocalManager(){
+        refresh();
     }
 
     public void deleteProfile(PlayerProfile pp){
