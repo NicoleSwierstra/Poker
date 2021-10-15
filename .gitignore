@@ -2,3 +2,4 @@
 *.class
 .replit
 .vscode/*
+res/profiles/*
