@@ -1,4 +1,4 @@
-package Networking.h;
+package Networking.test;
 import java.net.URL;
 import java.net.MalformedURLException;
 // i did some things:
