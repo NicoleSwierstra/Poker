@@ -22,7 +22,7 @@ public class PlayerProfile {
 
     public BufferedImage avatar;
     public String username;
-    int lifetimeChips;
+    public int lifetimeChips;
     int id;
     File saveFile;
 

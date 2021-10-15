@@ -72,7 +72,9 @@ public class GraphicsTable extends Table {
             () -> { main.interrupt(); System.exit(0); }
         );
         gui.applyQueue();
-
+        for(int i = 0; i < profiles.size(); i++){
+            profiles.get(i).lifetimeChips += (players.get(i).money - 20);
+        }
         try {
             Thread.sleep(Long.MAX_VALUE); //sleeps for 292.5 billion years
         } catch (InterruptedException e) {}
