@@ -22,7 +22,15 @@ public class LocalManager {
         }
     }
 
-    public PlayerProfile LoadDefault(){
+    public void deleteProfile(PlayerProfile pp){
+        profiles.remove(pp);
+        File ppf = new File("res/profiles/" + pp.username + ".ppf");
+        ppf.delete();
+        File avi = new File("res/profiles/avatars/" + pp.username + ".png");
+        avi.delete();
+    }
+
+    public PlayerProfile loadDefault(){
         String name = "";
         try {
             FileInputStream fin = new FileInputStream(new File("res/svdat/default.txt"));
@@ -35,10 +43,10 @@ public class LocalManager {
                 if(p.username.startsWith(name))
                     return p;
             }
-            return null;
+            return PlayerProfile.newDefault();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return null;
+            return PlayerProfile.newDefault();
         }
     }
 }

@@ -10,6 +10,7 @@ public class GraphicsGame {
     _mode mode;
     Window w;
     PlayerProfile currentPlayer;
+    LocalManager lm;
 
     void playerAvi(){
         w.gui.queueText(currentPlayer.username, 0.05f, 0.2f, 0.1f, 0.03f);
@@ -34,7 +35,8 @@ public class GraphicsGame {
             "Online", "res/icon/globe.png",
             0.5f, 0.55f, 0.125f, 0.25f,
             () -> {
-                
+                mode = _mode.ONLINE;
+                t.interrupt();
             }
         );
         w.gui.queueButton(
@@ -63,9 +65,8 @@ public class GraphicsGame {
     }
 
     public GraphicsGame(){
-        LocalManager lm = new LocalManager();
-
-        currentPlayer = lm.LoadDefault();
+        lm = new LocalManager();
+        currentPlayer = lm.loadDefault();
         
         w = new Window();
         mode = _mode.MAIN;
@@ -92,6 +93,7 @@ public class GraphicsGame {
                     menu();
                     break;
                 case ONLINE:
+                    mode = _mode.MAIN;
                     break;
                 case PROFILE:
                     ProfileEditor.PlayerProfileEdit(w.gui, this, w);

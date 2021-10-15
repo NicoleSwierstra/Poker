@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+import javax.imageio.ImageIO;
+
 /** Player profile file:
  *  x50 x50 x46 x00 | x00 x00 x00 x00 <- Header and spare bytes
  *  id, 4 bytes     | Name ->>>>> x00
@@ -62,22 +64,35 @@ public class PlayerProfile {
         catch(IOException h){h.printStackTrace();}
     }
 
+    public static PlayerProfile newDefault(){
+        BufferedImage buff;
+        try {
+            buff = ImageIO.read(new File("res/profiles/avatars/default.png"));
+        } catch (IOException e) {
+            buff = new BufferedImage(256, 256, 2);
+            e.printStackTrace();
+        }
+        PlayerProfile ppf = new PlayerProfile(buff, "Guest", 0, 0);
+        return ppf;
+    }
+
     //loading from file
     static PlayerProfile loadNewFromFile(File filein) throws IOException{
         FileInputStream in = new FileInputStream(filein);
 
-        BufferedImage avi = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
         String name = "";
         int id;
         int chips;
 
         byte[] header = in.readNBytes(8);
         for(int i = 0; i < 8; i++){
-            if(header[i] != headerstr[i]) 
+            if(header[i] != headerstr[i]) {
+                in.close();
                 throw new IOException("Not a PPF file, header is: " +
                     header[0] + " " + header[1] + " " + header[2] + " " + header[3] + " " +
                     header[4] + " " + header[5] + " " + header[6] + " " + header[7]    
                 );
+            }   
         }
         
         id = byteArrayToInt(in.readNBytes(4));
@@ -85,21 +100,17 @@ public class PlayerProfile {
         while((i = in.read()) != 0){
             name += (char)i;
         }
-        while((i = in.read()) == 0);
-        byte[] next = in.readNBytes(3);
-        chips = byteArrayToInt(new byte[]{(byte)i, next[0], next[1], next[2]});
+        chips = byteArrayToInt(in.readNBytes(4));
 
-        int[] ints = byteArrayToIntArray(in.readNBytes(262144));
-        avi.setRGB(0, 0, 256, 256, ints, 0, 256);
         in.close();
-        PlayerProfile pp = new PlayerProfile(avi, name, id, chips);
+        PlayerProfile pp = new PlayerProfile(ImageIO.read(new File("res/profiles/avatars/" + name + ".png")), name, id, chips);
         return pp;
     }
     
     //saves to a new file
     static void saveOldToFile(PlayerProfile pp, File old) throws IOException {
-        saveNewToFile(pp);
         old.delete();
+        saveNewToFile(pp);
     }
     
     //saves to a new file
@@ -111,12 +122,9 @@ public class PlayerProfile {
         os.write(intToByteArray(pp.id));
         os.write(pp.username.getBytes(Charset.forName("ASCII")));
         
-        int thusfar = 12 + pp.username.getBytes(Charset.forName("ASCII")).length;
-        int writenumber = 4 - (thusfar % 4);
-        for(int i = 0; i < writenumber; i++) os.write(0x00);
-
+        os.write(0x00);
         os.write(intToByteArray(pp.lifetimeChips));
-        os.write(imageBytes(pp.avatar));
+        ImageIO.write(pp.avatar, "png", new File("res/profiles/avatars/" + pp.username + ".png"));
         os.close();
     }
 
@@ -132,7 +140,7 @@ public class PlayerProfile {
 
     //converts an int to highest first 4 byte array
     public static int byteArrayToInt(byte[] data){
-        return (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
+        return ((int)data[0] << 24) | ((int)data[1] << 16) | ((int)data[2] << 8) | (int)data[3];
     }
 
     //lol
@@ -141,20 +149,9 @@ public class PlayerProfile {
         for(int i = 0; i < intarr.length; i++){
             int l = i * 4;
             intarr[i] = byteArrayToInt(new byte[]{
-                data[l], data[l + 1], data[l + 2], data[l + 3]
+                data[l], data[l + 1], data[l + 2], data[l + 3],
             });
         }
         return intarr;
-    }
-
-    //I hope this works
-    static byte[] imageBytes(BufferedImage bi){
-        int[] rgb = new int[65536];
-        bi.getRGB(0, 0, 256, 256, rgb, 0, 256);
-        byte[] rgbyte = new byte[262144];
-        for(int i = 0; i < 65536; i++){
-            System.arraycopy(intToByteArray(rgb[i]), 0, rgbyte, i * 4, 4);
-        }
-        return rgbyte;
     }
 }
