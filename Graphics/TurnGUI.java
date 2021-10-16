@@ -1,6 +1,7 @@
 package Graphics;
 
 import GameLogic.*;
+import Graphics.GUI.GUI;
 
 public class TurnGUI {
     Player player;

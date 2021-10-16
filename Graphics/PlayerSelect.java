@@ -1,15 +1,15 @@
 package Graphics;
 
+import Graphics.GUI.*;
 import java.util.List;
 import java.util.ArrayList;
 
-import Graphics.GUI.ButtonInterface;
 import Networking.PlayerProfiles.LocalManager;
 import Networking.PlayerProfiles.PlayerProfile;
 
 public class PlayerSelect {
     List<PlayerProfile> profiles;
-    GUI.GUIList guilist;
+    GUIList guilist;
 
     PlayerSelect(){
         profiles = new ArrayList<PlayerProfile>();

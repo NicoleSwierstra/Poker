@@ -2,13 +2,12 @@ package Graphics;
 
 import Networking.PlayerProfiles.*;
 
+import Graphics.GUI.*;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.*;
 import javax.swing.filechooser.*;
-
-import Graphics.GUI.ButtonInterface;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -53,11 +52,11 @@ public class ProfileEditor {
     static void PlayerProfileEdit(GUI gui, GraphicsGame graphicsGame, Window win) {
         Thread t = Thread.currentThread();
         ppf = graphicsGame.currentPlayer;
-        GUI.TextBox namebox = gui.queueTextBox(ppf.username, 0.325f, 0.3f, 0.25f, 0.05f);
-        GUI.Texture avitex = gui.queueTexture(ppf.avatar, 0.65f, 0.35f, 0.2f, 0.2f);
+        TextBox namebox = gui.queueTextBox(ppf.username, 0.325f, 0.3f, 0.25f, 0.05f);
+        Texture avitex = gui.queueTexture(ppf.avatar, 0.65f, 0.35f, 0.2f, 0.2f);
         gui.queueText("Edit profile:", 0.35f, 0.15f, 0.2f, 0.1f);
 
-        gui.queueText("Lifetime chips: " + ppf.lifetimeChips, 0.35f, 0.45f, 0.2f, 0.05f);
+        //gui.queueText("Lifetime chips: " + ppf.lifetimeChips, 0.35f, 0.45f, 0.2f, 0.05f);
 
         gui.queueButton("Set AVI", 0.65f, 0.15f, 0.1f, 0.1f, ()->{
             JFileChooser chooser = new JFileChooser();

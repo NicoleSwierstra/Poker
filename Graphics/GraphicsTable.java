@@ -1,6 +1,7 @@
 package Graphics;
 
 import GameLogic.*;
+import Graphics.GUI.GUI;
 import Networking.PlayerProfiles.PlayerProfile;
 
 import java.awt.Graphics;
@@ -67,8 +68,13 @@ public class GraphicsTable extends Table {
             () -> { main.interrupt(); gui.applyQueue();}
         );
         gui.queueButton(
-            "Quit", 
+            "Menu", 
             0.5f, 0.65f, 0.3f, 0.1f,
+            () -> { main.interrupt(); win.g.renderGame = false;}
+        );
+        gui.queueButton(
+            "Quit", 
+            0.5f, 0.8f, 0.3f, 0.1f,
             () -> { main.interrupt(); System.exit(0); }
         );
         gui.applyQueue();

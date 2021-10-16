@@ -87,8 +87,9 @@ public class GraphicsGame {
                         w.tr.addPlayer(psel.profiles.get(i));
                     }
                     w.g.renderGame = true;  
-                    while(true) w.tr.game();
-                    //break;
+                    while(w.g.renderGame) w.tr.game();
+                    mode = _mode.MAIN;
+                    break;
                 case MAIN:
                     menu();
                     break;

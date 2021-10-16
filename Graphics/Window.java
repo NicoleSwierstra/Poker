@@ -1,6 +1,9 @@
 package Graphics;
 
 import javax.swing.*;
+
+import Graphics.GUI.GUI;
+
 import java.awt.*;
 import java.awt.event.*;
 
