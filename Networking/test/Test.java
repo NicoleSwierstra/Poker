@@ -7,10 +7,10 @@ import java.io.*;
 
 public class Test {
     public static void main(String[] args){
-        new Test();
+        new Test(true);
     }
 
-    Test(){
+    Test(boolean send){
         Enumeration e;
         try {
             e = NetworkInterface.getNetworkInterfaces();
@@ -31,25 +31,32 @@ public class Test {
 
         Scanner sc = new Scanner(System.in);
 
-        String ip = sc.nextLine();
-
         try {
-            Socket s = new Socket(ip, 3333);
-            DataInputStream din = new DataInputStream(s.getInputStream());
-            DataOutputStream dout = new DataOutputStream(s.getOutputStream());
-            
-            String message = sc.nextLine();
-            message += '\0';
-            dout.writeBytes(message);
-
-            String recieve = new String();
-            char c;
-            while((c = (char)din.readByte()) != '\0'){
-                recieve += c;
-            }
-            System.out.println(recieve);
+            String ip = sc.nextLine();
+            Socket s = send ? new Socket(ip, 1332) : new ServerSocket(1332).accept();
+            if(send) Send(s);
+            else Recieve(s, sc);
         } catch (IOException e1) {
             e1.printStackTrace();
         }
+    }
+
+    void Recieve(Socket s, Scanner sc) throws IOException{
+        DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+            
+        String message = sc.nextLine();
+        message += '\0';
+        dout.writeBytes(message);
+    }
+
+    void Send(Socket s) throws IOException{
+        DataInputStream din = new DataInputStream(s.getInputStream());
+
+        String recieve = new String();
+        char c;
+        while((c = (char)din.readByte()) != '\0'){
+            recieve += c;
+        }
+        System.out.println(recieve);
     }
 }
