@@ -22,7 +22,7 @@ public class InHandler implements Runnable {
     public InHandler(DataInputStream dis){
         instream = dis;
         //new Thread(this).start(); //does the run method or whatever
-        while(true){
+        while(instream != null){
             try {
                 System.out.println("WAITING FOR PACKET");
                 processPacket(new ByteArrayInputStream(instream.readAllBytes()));
