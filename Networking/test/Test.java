@@ -7,7 +7,7 @@ import java.io.*;
 
 public class Test {
     public static void main(String[] args){
-        new Test(false);
+        new Test(true);
     }
 
     Test(boolean send){
@@ -27,6 +27,8 @@ public class Test {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
+
+        while(true);
     }
 
     void Send(Socket s, Scanner sc) throws IOException{
