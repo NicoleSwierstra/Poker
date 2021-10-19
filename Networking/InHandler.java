@@ -25,7 +25,7 @@ public class InHandler implements Runnable {
         while(instream != null){
             try {
                 System.out.println("WAITING FOR PACKET");
-                processPacket(new ByteArrayInputStream(instream.readAllBytes()));
+                processPacket(instream);
                 System.out.println("GOT PACKET");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -47,19 +47,19 @@ public class InHandler implements Runnable {
 
     //processes a packet and checks the first two bytes
     //if any error is recorded, the error is printed to the error stream ig
-    void processPacket(ByteArrayInputStream datain) throws IOException{
-        if(datain.read() != 0x00 && datain.read() != 0xFF) {
+    void processPacket() throws IOException{
+        if(instream.read() != 0x00 && instream.read() != 0xFF) {
             System.err.println("UNVERIFIED PACKET");
             return;
         }
 
-        int type = datain.read();
+        int type = instream.read();
 
         switch(type){
             case 0: // null
                 break;
             case 1: // ping time
-                System.out.println(System.currentTimeMillis() - ByteUtils.bytesToLong(datain.readNBytes(8)));
+                System.out.println(System.currentTimeMillis() - ByteUtils.bytesToLong(instream.readNBytes(8)));
                 break;
             default:
                 System.err.println("UNRECOGNIZED PACKET");
