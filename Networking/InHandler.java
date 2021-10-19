@@ -24,7 +24,9 @@ public class InHandler implements Runnable {
         //new Thread(this).start(); //does the run method or whatever
         while(true){
             try {
+                System.out.println("WAITING FOR PACKET");
                 processPacket(new ByteArrayInputStream(instream.readAllBytes()));
+                System.out.println("GOT PACKET");
             } catch (IOException e) {
                 e.printStackTrace();
             }
