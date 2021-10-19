@@ -1,6 +1,9 @@
 package Networking.test;
 
 import java.util.*;
+
+import Networking.*;
+
 import java.io.IOException;
 import java.net.*;
 import java.io.*;
@@ -22,11 +25,18 @@ public class Test {
         try {
             ServerSocket ss = new ServerSocket(1332);
             Socket s = send ? ss.accept() : new Socket(sc.nextLine(), 1332);
-            if(send) Send(s, sc);
-            else Recieve(s);
+            if(send) {
+                new InHandler(new DataInputStream(s.getInputStream()));
+                new OutHandler(new DataOutputStream(s.getOutputStream()));
+            }
+            else {
+                new InHandler(new DataInputStream(s.getInputStream()));
+            }
         } catch (IOException e1) {
             e1.printStackTrace();
         }
+
+        sc.close();
 
         while(true);
     }

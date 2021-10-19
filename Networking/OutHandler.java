@@ -4,6 +4,8 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.*;
 
+import utils.ByteUtils;
+
 /** 0x00 0xFF
  *  Packet types
  *  0x00: NULL
@@ -15,47 +17,36 @@ import java.util.*;
 
 
 //at this time this class is a test that checks the ping between two systems
-public class OutHandler implements Runnable {
+public class OutHandler {
     DataOutputStream outstream;
+    Timer pingTimer;
 
     //the world's lamest constructor
-    OutHandler(DataOutputStream dis){
-        dis = outstream;
+    public OutHandler(DataOutputStream dos){
+        dos = outstream;
+        addPingTimer();
     }
 
-    //checks for new packet in a while loop
-    //to be quite honest i have no idea if this will work properly
-    public void run(){
-        try {
-            while(true){
-                byte[] packet = outstream.readAllBytes();
-                processPacket(new ByteArrayInputStream(packet));
+    //adds the ping timer
+    public void addPingTimer(){
+        pingTimer = new Timer();
+        pingTimer.schedule(new TimerTask(){
+            public void run(){
+                try {
+                    sendPing();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (IOException e) {
-
-        }
+        }, 1000);
     }
 
-    //processes a packet and checks the first two bytes
-    //if any error is recorded, the error is printed to the error stream ig
-    void processPacket(ByteArrayInputStream datain) throws IOException{
-        if(datain.read() != 0x00 && datain.read() != 0xFF) {
-            System.err.println("UNVERIFIED PACKET");
-            return;
-        }
-
-        int type = datain.read();
-
-        switch(type){
-            case 0:
-                break;
-            case 1:
-                //i wanted to get rid of the variable but it's here now for readability
-                long servertime = ByteBuffer.wrap(datain.readNBytes(8)).getLong();
-                System.out.println(System.currentTimeMillis() - servertime);
-                break;
-            default:
-                System.err.println("UNRECOGNIZED PACKET");
-        }
+    //sends a ping
+    void sendPing() throws IOException {
+        outstream.write(0x00);
+        outstream.write(0xFF);
+        outstream.write(0x01);
+        outstream.write(ByteUtils.longToBytes(System.currentTimeMillis()));
+        outstream.flush();
     }
 }

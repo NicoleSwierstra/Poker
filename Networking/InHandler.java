@@ -1,8 +1,8 @@
 package Networking;
 
 import java.io.*;
-import java.nio.ByteBuffer;
-import java.util.*;
+
+import utils.ByteUtils;
 
 /** 0x00 0xFF
  *  Packet types
@@ -13,14 +13,14 @@ import java.util.*;
  *  0x04: TABLE UPDATE
  */ 
 
-
 //at this time this class is a test that checks the ping between two systems
 public class InHandler implements Runnable {
     DataInputStream instream;
 
     //the world's lamest constructor
-    InHandler(DataInputStream dis){
+    public InHandler(DataInputStream dis){
         dis = instream;
+        new Thread(this).start(); //does the run method or whatever
     }
 
     //checks for new packet in a while loop
@@ -47,12 +47,10 @@ public class InHandler implements Runnable {
         int type = datain.read();
 
         switch(type){
-            case 0:
+            case 0: // null
                 break;
-            case 1:
-                //i wanted to get rid of the variable but it's here now for readability
-                long servertime = ByteBuffer.wrap(datain.readNBytes(8)).getLong();
-                System.out.println(System.currentTimeMillis() - servertime);
+            case 1: // ping time
+                System.out.println(System.currentTimeMillis() - ByteUtils.bytesToLong(datain.readNBytes(8)));
                 break;
             default:
                 System.err.println("UNRECOGNIZED PACKET");

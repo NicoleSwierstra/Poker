@@ -9,6 +9,8 @@ import java.nio.charset.Charset;
 
 import javax.imageio.ImageIO;
 
+import utils.ByteUtils;
+
 /** Player profile file:
  *  x50 x50 x46 x00 | x00 x00 x00 x00 <- Header and spare bytes
  *  id, 4 bytes     | Name ->>>>> x00
@@ -95,12 +97,12 @@ public class PlayerProfile {
             }   
         }
         
-        id = byteArrayToInt(in.readNBytes(4));
+        id = ByteUtils.bytesToInt(in.readNBytes(4));
         int i = 0;
         while((i = in.read()) != 0){
             name += (char)i;
         }
-        chips = byteArrayToInt(in.readNBytes(4));
+        chips = ByteUtils.bytesToInt(in.readNBytes(4));
 
         in.close();
         PlayerProfile pp = new PlayerProfile(ImageIO.read(new File("res/profiles/avatars/" + name + ".png")), name, id, chips);
@@ -119,28 +121,13 @@ public class PlayerProfile {
         FileOutputStream os = new FileOutputStream(output);
 
         os.write(headerstr);
-        os.write(intToByteArray(pp.id));
+        os.write(ByteUtils.intToBytes(pp.id));
         os.write(pp.username.getBytes(Charset.forName("ASCII")));
         
         os.write(0x00);
-        os.write(intToByteArray(pp.lifetimeChips));
+        os.write(ByteUtils.intToBytes(pp.lifetimeChips));
         ImageIO.write(pp.avatar, "png", new File("res/profiles/avatars/" + pp.username + ".png"));
         os.close();
-    }
-
-    //converts an int to highest first 4 byte array
-    public static byte[] intToByteArray(int data){
-        return new byte[]{
-            (byte)((data >>> 24) & 0xff),
-            (byte)((data >> 16) & 0xff),
-            (byte)((data >> 8)  & 0xff),
-            (byte)((data >> 0)  & 0xff),
-        };
-    }
-
-    //converts an int to highest first 4 byte array
-    public static int byteArrayToInt(byte[] data){
-        return ((int)data[0] << 24) | ((int)data[1] << 16) | ((int)data[2] << 8) | (int)data[3];
     }
 
     //lol
@@ -148,7 +135,7 @@ public class PlayerProfile {
         int[] intarr = new int[data.length / 4];
         for(int i = 0; i < intarr.length; i++){
             int l = i * 4;
-            intarr[i] = byteArrayToInt(new byte[]{
+            intarr[i] = ByteUtils.bytesToInt(new byte[]{
                 data[l], data[l + 1], data[l + 2], data[l + 3],
             });
         }
