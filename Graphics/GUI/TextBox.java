@@ -22,7 +22,7 @@ public class TextBox extends GUIElement {
         else if (gui.checkIntersect(this, false, xmouse, ymouse))
             g.setColor(new Color(127, 127, 127, 125));
         else
-            g.setColor(new Color(255, 255, 255));
+            g.setColor(new Color(255, 255, 255, 125));
 
         ((Graphics2D)g).fillRoundRect(xmin, ymin, bw, bh, 10, 10);
         g.setColor(new Color(0, 0, 0));
