@@ -7,10 +7,48 @@ import java.io.*;
 
 public class Test {
     public static void main(String[] args){
-        new Test(true);
+        new Test(false);
     }
 
     Test(boolean send){
+        try {
+            System.out.println(InetAddress.getLocalHost().getHostAddress());
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            ServerSocket ss = new ServerSocket(1332);
+            Socket s = send ? ss.accept() : new Socket(sc.nextLine(), 1332);
+            if(send) Send(s, sc);
+            else Recieve(s);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    void Send(Socket s, Scanner sc) throws IOException{
+        DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+            
+        String message = sc.nextLine();
+        message += '\0';
+        dout.writeBytes(message);
+    }
+
+    void Recieve(Socket s) throws IOException{
+        DataInputStream din = new DataInputStream(s.getInputStream());
+
+        String recieve = new String();
+        char c;
+        while((c = (char)din.readByte()) != '\0'){
+            recieve += c;
+        }
+        System.out.println(recieve);
+    }
+
+    void listAllAdresses(){
         Enumeration e;
         try {
             e = NetworkInterface.getNetworkInterfaces();
@@ -28,35 +66,5 @@ public class Test {
                 System.out.println(i.getHostAddress());
             }
         }
-
-        Scanner sc = new Scanner(System.in);
-
-        try {
-            String ip = sc.nextLine();
-            Socket s = send ? new Socket(ip, 1332) : new ServerSocket(1332).accept();
-            if(send) Send(s);
-            else Recieve(s, sc);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-    }
-
-    void Recieve(Socket s, Scanner sc) throws IOException{
-        DataOutputStream dout = new DataOutputStream(s.getOutputStream());
-            
-        String message = sc.nextLine();
-        message += '\0';
-        dout.writeBytes(message);
-    }
-
-    void Send(Socket s) throws IOException{
-        DataInputStream din = new DataInputStream(s.getInputStream());
-
-        String recieve = new String();
-        char c;
-        while((c = (char)din.readByte()) != '\0'){
-            recieve += c;
-        }
-        System.out.println(recieve);
     }
 }
