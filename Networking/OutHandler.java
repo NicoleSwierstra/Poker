@@ -5,16 +5,6 @@ import java.util.*;
 
 import utils.ByteUtils;
 
-/** 0x00 0xFF
- *  Packet types
- *  0x00: NULL
- *  0x01: CLOCK / PING
- *  0x02: ADVANCE TURN
- *  0x03: GAME END
- *  0x04: TABLE UPDATE
- */ 
-
-
 //at this time this class is a test that checks the ping between two systems
 public class OutHandler {
     DataOutputStream outstream;
@@ -22,7 +12,7 @@ public class OutHandler {
 
     //the world's lamest constructor
     public OutHandler(DataOutputStream dos){
-        dos = outstream;
+        outstream = dos;
         addPingTimer();
     }
 

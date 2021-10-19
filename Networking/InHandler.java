@@ -11,6 +11,7 @@ import utils.ByteUtils;
  *  0x02: ADVANCE TURN
  *  0x03: GAME END
  *  0x04: TABLE UPDATE
+ *  0x05: USER PROFILE
  */ 
 
 //at this time this class is a test that checks the ping between two systems
@@ -19,21 +20,27 @@ public class InHandler implements Runnable {
 
     //the world's lamest constructor
     public InHandler(DataInputStream dis){
-        dis = instream;
-        new Thread(this).start(); //does the run method or whatever
+        instream = dis;
+        //new Thread(this).start(); //does the run method or whatever
+        while(true){
+            try {
+                processPacket(new ByteArrayInputStream(instream.readAllBytes()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     //checks for new packet in a while loop
     //to be quite honest i have no idea if this will work properly
     public void run(){
-        try {
-            while(true){
-                byte[] packet = instream.readAllBytes();
-                processPacket(new ByteArrayInputStream(packet));
-            }
-        } catch (IOException e) {
+       //try {
+       //    while(true){
+       //        processPacket(new ByteArrayInputStream(instream.readAllBytes()));
+       //    }
+       //} catch (IOException e) {
 
-        }
+       //}
     }
 
     //processes a packet and checks the first two bytes

@@ -41,25 +41,6 @@ public class Test {
         while(true);
     }
 
-    void Send(Socket s, Scanner sc) throws IOException{
-        DataOutputStream dout = new DataOutputStream(s.getOutputStream());
-            
-        String message = sc.nextLine();
-        message += '\0';
-        dout.writeBytes(message);
-    }
-
-    void Recieve(Socket s) throws IOException{
-        DataInputStream din = new DataInputStream(s.getInputStream());
-
-        String recieve = new String();
-        char c;
-        while((c = (char)din.readByte()) != '\0'){
-            recieve += c;
-        }
-        System.out.println(recieve);
-    }
-
     void listAllAdresses(){
         Enumeration e;
         try {
