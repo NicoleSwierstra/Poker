@@ -26,10 +26,12 @@ public class Test {
             ServerSocket ss = new ServerSocket(1332);
             Socket s = send ? ss.accept() : new Socket(sc.nextLine(), 1332);
             if(send) {
+                System.out.println("CONNECTED TO " + ss.getLocalSocketAddress());
                 new InHandler(new DataInputStream(s.getInputStream()));
                 new OutHandler(new DataOutputStream(s.getOutputStream()));
             }
             else {
+                System.out.println("CONNECTED TO " + s.getInetAddress());
                 new InHandler(new DataInputStream(s.getInputStream()));
             }
         } catch (IOException e1) {
