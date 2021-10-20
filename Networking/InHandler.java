@@ -23,6 +23,7 @@ public class InHandler implements Runnable {
     public InHandler(DataInputStream dis, OutHandler out){
         instream = dis;
         outhandler = out;
+        isserver = outhandler.server;
         //new Thread(this).start(); //does the run method or whatever
         while(instream != null){
             try {

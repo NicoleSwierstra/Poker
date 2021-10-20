@@ -7,12 +7,14 @@ import utils.ByteUtils;
 
 //at this time this class is a test that checks the ping between two systems
 public class OutHandler {
+    boolean server;
     DataOutputStream outstream;
     Timer pingTimer;
 
     //the world's lamest constructor
     public OutHandler(DataOutputStream dos, boolean server){
         outstream = dos;
+        this.server = server;
         if(server) addPingTimer();
     }
 
@@ -39,7 +41,7 @@ public class OutHandler {
         outstream.flush();
     }
 
-    //sends a ping
+    //returns a ping for ping measurement
     void sendPing(byte[] inping) throws IOException {
         outstream.write(0x00); //init
         outstream.write(0xFF); //init 2
