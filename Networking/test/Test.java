@@ -26,6 +26,7 @@ public class Test {
             ServerSocket ss = new ServerSocket(1332);
             Socket s = send ? ss.accept() : new Socket(sc.nextLine(), 1332);
             new InHandler(new DataInputStream(s.getInputStream()), new OutHandler(new DataOutputStream(s.getOutputStream()), send));
+            ss.close();
         } catch (IOException e1) {
             e1.printStackTrace();
         }
@@ -36,7 +37,7 @@ public class Test {
     }
 
     void listAllAdresses(){
-        Enumeration e;
+        Enumeration<NetworkInterface> e;
         try {
             e = NetworkInterface.getNetworkInterfaces();
         } catch (SocketException e1) {
@@ -46,7 +47,7 @@ public class Test {
         while(e.hasMoreElements())
         {
             NetworkInterface n = (NetworkInterface) e.nextElement();
-            Enumeration ee = n.getInetAddresses();
+            Enumeration<InetAddress> ee = n.getInetAddresses();
             while (ee.hasMoreElements())
             {
                 InetAddress i = (InetAddress) ee.nextElement();

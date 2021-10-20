@@ -66,10 +66,7 @@ public class InHandler implements Runnable {
             case 0: // null
                 break;
             case 1: // ping time
-                if(isserver){
-                    System.out.println(System.currentTimeMillis() - ByteUtils.bytesToLong(instream.readNBytes(8)));
-                }
-                else outhandler.sendPing(instream.readNBytes(8));
+                pingHandler(instream.readNBytes(8));
                 break;
             case 2: // advance
                 break;
@@ -79,6 +76,18 @@ public class InHandler implements Runnable {
                 break;
             default:
                 System.err.println("UNRECOGNIZED PACKET");
+        }
+    }
+
+    void pingHandler(byte[] pingbytes){
+        if(isserver){
+            System.out.println(System.currentTimeMillis() - ByteUtils.bytesToLong(pingbytes));
+        } 
+        else
+        try {
+            outhandler.sendPing(pingbytes);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

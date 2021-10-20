@@ -94,6 +94,7 @@ public class GraphicsGame {
                     menu();
                     break;
                 case ONLINE:
+                    Networking.ConnectGUI.showNetworkGUI(w.gui);
                     mode = _mode.MAIN;
                     break;
                 case PROFILE:
