@@ -9,9 +9,8 @@ import utils.ByteUtils;
  *  0x00: NULL
  *  0x01: CLOCK / PING
  *  0x02: ADVANCE TURN
- *  0x03: GAME END
+ *  0x03: USER PROFILE
  *  0x04: TABLE UPDATE
- *  0x05: USER PROFILE
  */ 
 
 //at this time this class is a test that checks the ping between two systems
@@ -25,7 +24,7 @@ public class InHandler implements Runnable {
         while(instream != null){
             try {
                 System.out.println("WAITING FOR PACKET");
-                processPacket(instream);
+                processPacket();
                 System.out.println("GOT PACKET");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -48,7 +47,11 @@ public class InHandler implements Runnable {
     //processes a packet and checks the first two bytes
     //if any error is recorded, the error is printed to the error stream ig
     void processPacket() throws IOException{
-        if(instream.read() != 0x00 && instream.read() != 0xFF) {
+        if(instream.read() != 0x00) {
+            System.err.println("CANT FIND PACKET START");
+            return;
+        }
+        if(instream.read() != 0xFF){
             System.err.println("UNVERIFIED PACKET");
             return;
         }
@@ -60,6 +63,12 @@ public class InHandler implements Runnable {
                 break;
             case 1: // ping time
                 System.out.println(System.currentTimeMillis() - ByteUtils.bytesToLong(instream.readNBytes(8)));
+                break;
+            case 2: // advance
+                break;
+            case 3: // profile
+                break;
+            case 4: // table
                 break;
             default:
                 System.err.println("UNRECOGNIZED PACKET");

@@ -42,7 +42,8 @@ public class OutHandler {
 
     //sends a ping
     void sendPing() throws IOException {
-        System.out.println("epic");
+        System.out.println("SENT PACKET");
+        
         outstream.write(0x00); //init
         outstream.write(0xFF); //init 2
         outstream.write(0x01); //this is a clock pulse
