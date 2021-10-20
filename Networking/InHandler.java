@@ -15,11 +15,14 @@ import utils.ByteUtils;
 
 //at this time this class is a test that checks the ping between two systems
 public class InHandler implements Runnable {
+    boolean isserver;
     DataInputStream instream;
+    OutHandler outhandler;
 
     //the world's lamest constructor
-    public InHandler(DataInputStream dis){
+    public InHandler(DataInputStream dis, OutHandler out){
         instream = dis;
+        outhandler = out;
         //new Thread(this).start(); //does the run method or whatever
         while(instream != null){
             try {
@@ -35,13 +38,13 @@ public class InHandler implements Runnable {
     //checks for new packet in a while loop
     //to be quite honest i have no idea if this will work properly
     public void run(){
-       //try {
-       //    while(true){
-       //        processPacket(new ByteArrayInputStream(instream.readAllBytes()));
-       //    }
-       //} catch (IOException e) {
+        try {
+            while(true){
+                processPacket();
+            }
+        } catch (IOException e) {
 
-       //}
+        }
     }
 
     //processes a packet and checks the first two bytes
@@ -62,7 +65,10 @@ public class InHandler implements Runnable {
             case 0: // null
                 break;
             case 1: // ping time
-                System.out.println(System.currentTimeMillis() - ByteUtils.bytesToLong(instream.readNBytes(8)));
+                if(isserver){
+                    System.out.println(System.currentTimeMillis() - ByteUtils.bytesToLong(instream.readNBytes(8)));
+                }
+                else outhandler.sendPing(instream.readNBytes(8));
                 break;
             case 2: // advance
                 break;

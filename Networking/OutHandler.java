@@ -11,19 +11,9 @@ public class OutHandler {
     Timer pingTimer;
 
     //the world's lamest constructor
-    public OutHandler(DataOutputStream dos){
+    public OutHandler(DataOutputStream dos, boolean server){
         outstream = dos;
-        //addPingTimer();
-        long expectedTime = System.currentTimeMillis() + 1000;
-        do{
-            expectedTime = System.currentTimeMillis() + 1000;
-            try {
-                sendPing();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }while(System.currentTimeMillis() < expectedTime);
+        if(server) addPingTimer();
     }
 
     //adds the ping timer
@@ -42,12 +32,19 @@ public class OutHandler {
 
     //sends a ping
     void sendPing() throws IOException {
-        System.out.println("SENT PACKET");
-        
         outstream.write(0x00); //init
         outstream.write(0xFF); //init 2
         outstream.write(0x01); //this is a clock pulse
         outstream.write(ByteUtils.longToBytes(System.currentTimeMillis()));
+        outstream.flush();
+    }
+
+    //sends a ping
+    void sendPing(byte[] inping) throws IOException {
+        outstream.write(0x00); //init
+        outstream.write(0xFF); //init 2
+        outstream.write(0x01); //this is a clock pulse
+        outstream.write(inping);
         outstream.flush();
     }
 }
