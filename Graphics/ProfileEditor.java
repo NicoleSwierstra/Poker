@@ -16,14 +16,19 @@ public class ProfileEditor {
     static PlayerProfile ppf;
 
     //shows a list of all profiles, and "greys out" the selected profile
-    static void profileSelect(GUI gui, LocalManager lm){
+    static void profileSelect(GUI gui, LocalManager lm, TextBox namebox, Texture avi){
         gui.saveGUI();
         int i;
         for(i = 0; i < lm.profiles.size(); i++){
             PlayerProfile profile = lm.profiles.get(i);
             if (profile != ppf) {
                 gui.queueButton(profile.username, 0.5f, 0.2f + (0.1f * i), 0.1f, 0.08f,
-                    () -> {ppf = profile; gui.applyOld();}
+                    () -> {
+                        ppf = profile;
+                        avi.bi = ppf.avatar;
+                        namebox.field = ppf.username;
+                        gui.applyOld();
+                    }
                 );
             }
             else gui.queueText(ppf.username, 0.5f, 0.2f + (0.1f * i), 0.1f, 0.04f);
@@ -95,7 +100,7 @@ public class ProfileEditor {
             }
             t.interrupt();
         });
-        gui.queueButton("Load", 0.325f, 0.6f, 0.075f, 0.1f, () -> {profileSelect(gui, graphicsGame.lm);});
+        gui.queueButton("Load", 0.325f, 0.6f, 0.075f, 0.1f, () -> {profileSelect(gui, graphicsGame.lm, namebox, avitex);});
         gui.queueButton("Cancel", 0.4125f, 0.6f, 0.075f, 0.1f, () -> {t.interrupt();});
         gui.queueButton("New", 0.4785f, 0.3f, 0.025f, 0.05f, () -> {
             ppf = PlayerProfile.newDefault();
