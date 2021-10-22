@@ -21,7 +21,7 @@ public class Server {
 
     void init(){
         try {
-            System.out.println("WAITING FOR CONNECTION");
+            System.out.println("WAITING FOR CONNECTION ON " + getIp());
             socket = sSocket.accept();
             System.out.println("CONNECTION ACCEPTED");
             outHandler = new OutHandler(new DataOutputStream(socket.getOutputStream()), false);
