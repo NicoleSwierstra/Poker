@@ -1,10 +1,12 @@
 package Networking.PlayerProfiles;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 
 import javax.imageio.ImageIO;
@@ -41,7 +43,8 @@ public class PlayerProfile {
         load(location);
     }
 
-    private void copyTo(PlayerProfile ppf){
+    //copies a profile to this object
+    private void copyProfileHere(PlayerProfile ppf){
         avatar = ppf.avatar;
         lifetimeChips = ppf.lifetimeChips;
         username = ppf.username;
@@ -52,12 +55,13 @@ public class PlayerProfile {
     void load(final String location){
         try {
             saveFile = new File(location);
-            copyTo(loadNewFromFile(saveFile));
+            copyProfileHere(loadFromStream(new FileInputStream(saveFile)));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     
+    //saves profile
     public void save(){
         try{
             if(saveFile == null) saveNewToFile(this);
@@ -66,6 +70,7 @@ public class PlayerProfile {
         catch(IOException h){h.printStackTrace();}
     }
 
+    //creates a profile if none can be found
     public static PlayerProfile newDefault(){
         BufferedImage buff;
         try {
@@ -78,10 +83,8 @@ public class PlayerProfile {
         return ppf;
     }
 
-    //loading from file
-    static PlayerProfile loadNewFromFile(File filein) throws IOException{
-        FileInputStream in = new FileInputStream(filein);
-
+    //loading from input stream
+    static PlayerProfile loadFromStream(InputStream in) throws IOException{
         String name = "";
         int id;
         int chips;
@@ -120,25 +123,27 @@ public class PlayerProfile {
         File output = new File("res/profiles/" + pp.username + ".ppf");
         FileOutputStream os = new FileOutputStream(output);
 
-        os.write(headerstr);
-        os.write(ByteUtils.intToBytes(pp.id));
-        os.write(pp.username.getBytes(Charset.forName("ASCII")));
-        
-        os.write(0x00);
-        os.write(ByteUtils.intToBytes(pp.lifetimeChips));
+        os.write(pp.getAllBytes(false));
         ImageIO.write(pp.avatar, "png", new File("res/profiles/avatars/" + pp.username + ".png"));
         os.close();
     }
 
-    //lol
-    public static int[] byteArrayToIntArray(byte[] data){
-        int[] intarr = new int[data.length / 4];
-        for(int i = 0; i < intarr.length; i++){
-            int l = i * 4;
-            intarr[i] = ByteUtils.bytesToInt(new byte[]{
-                data[l], data[l + 1], data[l + 2], data[l + 3],
-            });
+    //gets all of the bytes of the profile with a boolean toggle to output the image
+    public byte[] getAllBytes(boolean store_avi){
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+        try{
+            bos.write(headerstr);
+            bos.write(ByteUtils.intToBytes(id));
+            bos.write(username.getBytes(Charset.forName("ASCII")));
+            
+            bos.write(0x00);
+            bos.write(ByteUtils.intToBytes(lifetimeChips));
+            ImageIO.write(avatar, "PNG", bos);
+        } catch(IOException e){
+            e.printStackTrace();
         }
-        return intarr;
+        
+        return bos.toByteArray();
     }
 }

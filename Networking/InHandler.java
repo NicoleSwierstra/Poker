@@ -2,14 +2,15 @@ package Networking;
 
 import java.io.*;
 
+import Networking.PlayerProfiles.OnlineManager;
 import utils.ByteUtils;
 
 /** 0x00 0xFF
  *  Packet types
  *  0x00: NULL
  *  0x01: CLOCK / PING
- *  0x02: ADVANCE TURN
- *  0x03: USER PROFILE
+ *  0x02: PROFILE
+ *  0x03: ADVANCE
  *  0x04: TABLE UPDATE
  */ 
 
@@ -24,16 +25,16 @@ public class InHandler implements Runnable {
         instream = dis;
         outhandler = out;
         isserver = outhandler.server;
-        //new Thread(this).start(); //does the run method or whatever
-        while(instream != null){
-            try {
-                System.out.println("WAITING FOR PACKET");
-                processPacket();
-                System.out.println("GOT PACKET");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        new Thread(this).start(); //does the run method or whatever
+        //while(instream != null){
+        //    try {
+        //        System.out.println("WAITING FOR PACKET");
+        //        processPacket();
+        //        System.out.println("GOT PACKET");
+        //    } catch (IOException e) {
+        //        e.printStackTrace();
+        //    }
+        //}
     }
 
     //checks for new packet in a while loop
@@ -52,11 +53,11 @@ public class InHandler implements Runnable {
     //if any error is recorded, the error is printed to the error stream ig
     void processPacket() throws IOException{
         if(instream.read() != 0x00) {
-            System.err.println("CANT FIND PACKET START");
+            System.out.println("CANT FIND PACKET START");
             return;
         }
         if(instream.read() != 0xFF){
-            System.err.println("UNVERIFIED PACKET");
+            System.out.println("UNVERIFIED PACKET");
             return;
         }
 
@@ -68,9 +69,10 @@ public class InHandler implements Runnable {
             case 1: // ping time
                 pingHandler(instream.readNBytes(8));
                 break;
-            case 2: // advance
+            case 2: // profile
+                profileLoader(instream.readNBytes(ByteUtils.bytesToInt(instream.readNBytes(4))));
                 break;
-            case 3: // profile
+            case 3: // turn
                 break;
             case 4: // table
                 break;
@@ -81,11 +83,21 @@ public class InHandler implements Runnable {
 
     void pingHandler(byte[] pingbytes){
         if(isserver){
-            System.out.println(System.currentTimeMillis() - ByteUtils.bytesToLong(pingbytes));
+            synchronized (System.out){
+                System.out.println(System.currentTimeMillis() - ByteUtils.bytesToLong(pingbytes));
+            }
         } 
         else
         try {
             outhandler.sendPing(pingbytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void profileLoader(byte[] profile){
+        try {
+            Networking.PlayerProfiles.OnlineManager.AddProfile(profile);
         } catch (IOException e) {
             e.printStackTrace();
         }
