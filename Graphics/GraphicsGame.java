@@ -2,10 +2,11 @@ package Graphics;
 
 import Networking.PlayerProfiles.LocalManager;
 import Networking.PlayerProfiles.PlayerProfile;
+import Networking.ConnectGUI;
 
 public class GraphicsGame {
     enum _mode{
-        MAIN, GAME, PROFILE, ONLINE
+        MAIN, GAME, PROFILE, ONLINE, SETTINGS
     }
     _mode mode;
     Window w;
@@ -56,6 +57,14 @@ public class GraphicsGame {
                 System.exit(0);
             }
         );
+        w.gui.queueButton(
+            "Settings", "res/icon/settings.png",
+            0.97f, 0.05f, 0.04f, 0.08f,
+            () -> {
+                mode = _mode.SETTINGS;
+                t.interrupt();
+            }
+        );
         playerAvi();
 
         w.gui.applyQueue();
@@ -84,7 +93,7 @@ public class GraphicsGame {
                         continue;
                     }
                     for(int i = 0; i < psel.profiles.size(); i++){
-                        w.tr.addPlayer(psel.profiles.get(i));
+                        w.tr.addPlayer(psel.profiles.get(i), psel.profiles.get(i).username == "AI");
                     }
                     w.g.renderGame = true;  
                     while(w.g.renderGame) w.tr.game();
@@ -95,12 +104,20 @@ public class GraphicsGame {
                     break;
                 case ONLINE:
                     Networking.ConnectGUI.showNetworkGUI(w.gui);
+                    if(ConnectGUI.server != null){
+
+                    }
+                    else if (ConnectGUI.client != null){
+                        
+                    }
                     mode = _mode.MAIN;
                     break;
                 case PROFILE:
                     ProfileEditor.PlayerProfileEdit(w.gui, this, w);
                     mode = _mode.MAIN;
                     break;
+                case SETTINGS:
+                    SettingsMenu.Menu(w.gui, this, w);
                 default:
                     break;
             }

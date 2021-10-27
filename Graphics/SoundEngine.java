@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.sound.sampled.*;
 
 public class SoundEngine{
+    static float volume;
 
     static Map<String, AudioInputStream> clips = new HashMap<String, AudioInputStream>();
 
@@ -33,6 +34,8 @@ public class SoundEngine{
                         clips.put(location, inputStream);
                         inputStream.mark(10000000);   
                     }
+                    FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                    gainControl.setValue(volume);
                     clip.open(inputStream);
                     clip.start();
                 } catch (Exception e) {
@@ -40,5 +43,9 @@ public class SoundEngine{
                 }
             }
         }).start();
+    }
+
+    public static synchronized void setVolume(float v){
+        volume = v;
     }
 };

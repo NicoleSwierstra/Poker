@@ -2,19 +2,21 @@ package Graphics;
 
 import GameLogic.*;
 import Graphics.GUI.GUI;
+import Networking.ShittyAI;
 import Networking.PlayerProfiles.PlayerProfile;
 
 import java.awt.Graphics;
 import java.util.*;
 
 public class GraphicsTable extends Table {
-    TableRenderer tr;
+    protected TableRenderer tr;
     GUI gui;
     Window win;
     boolean showCards = true;
-    List<PlayerProfile> profiles;
+    int repeated = 0;
+    protected List<PlayerProfile> profiles;
 
-    GraphicsTable(Window win, GUI gui){
+    protected GraphicsTable(Window win, GUI gui){
         super();
         profiles = new ArrayList<PlayerProfile>();
         tr = new TableRenderer(win);
@@ -26,23 +28,25 @@ public class GraphicsTable extends Table {
         startGame();
     }
 
-    void Render(Graphics g){
+    protected void Render(Graphics g){
         tr.Render(g, pot, community, players, profiles, com_turnover, showCards ? turn : -1, end);
     }
 
-    public void addPlayer(PlayerProfile pp){
+    public void addPlayer(PlayerProfile pp, boolean ai){
         addPlayer(pp.username);
+        players.get(players.size() - 1).AI = ai;
         profiles.add(pp);
     }
 
     @Override
     protected void round(int num){
         com_turnover = comt[num];
+        repeated = 0;
         do {
-            for(int i = 0; i < players.size(); i++){
-                if(players.get(i).playing){
-                    turn = i;
-                    playerTurn(i);
+            repeated++;
+            for(turn = 0; turn < players.size(); turn++){
+                if(players.get(turn).playing){
+                    playerTurn(turn);
                 }
             }
         } while(!allAdvance());
@@ -52,8 +56,10 @@ public class GraphicsTable extends Table {
     protected void playerTurn(int turnNum){
         showCards = false;
         Player p = players.get(turnNum);
-        TurnGUI tg = new TurnGUI(p);
-        tg.takeTurn(gui, this);
+        if(!p.AI)
+            new TurnGUI(p).takeTurn(gui, this);
+        else
+            ShittyAI.takeAITurn(p, repeated);
     }
 
     @Override

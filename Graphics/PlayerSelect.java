@@ -25,7 +25,6 @@ public class PlayerSelect {
                 ButtonInterface bi = () -> {
                     profiles.add(ppf);
                     guilist.addButton(ppf.username, () -> {
-                        System.out.println(profiles.indexOf(ppf));
                         guilist.removeElement(profiles.indexOf(ppf));
                         profiles.remove(ppf);
                     });
@@ -47,8 +46,20 @@ public class PlayerSelect {
         gui.queueText("Select Players", 0.5f, 0.15f, 0.2f, 0.05f);
         gui.queueButton(
             "+", 
-            0.425f, 0.25f, 0.06f, 0.1f,
+            0.42f, 0.25f, 0.03f, 0.1f,
             () -> { profileSelect(gui, lm);}
+        );
+        //TODO: fix this inevitable catastrophy
+        gui.queueButton(
+            "+ai", 
+            0.45f, 0.25f, 0.03f, 0.1f,
+            () -> {
+                profiles.add(PlayerProfile.AIprofile());
+                guilist.addButton("AI", ()-> {
+                    guilist.removeElement(guilist.getList().size());
+                    profiles.remove(guilist.getList().size());
+                });
+            }
         );
         gui.queueButton(
             "back", 

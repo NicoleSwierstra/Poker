@@ -4,14 +4,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
-import utils.ByteUtils;
-
 /**
- * In theory this should work
- * 
- * Online manager reads profile information and stores the profile locally
+ * <b> In theory this should work </b>
+ * <br></br>
+ * Online manager reads profile information and stores the profile locally 
  */
 
 public class OnlineManager {

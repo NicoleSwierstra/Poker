@@ -66,6 +66,10 @@ public class GUI {
         GUIList l = new GUIList(horizontal, rows, spacing, x, y, width, height); eQueue.add(l); return l;
     }
 
+    public Slider queueSlider(float def, float max, float min, float x, float y, float width, float height){
+        Slider s = new Slider(def, max, min, x, y, width, height); eQueue.add(s); return s;
+    }
+
     public void saveGUI(){
         saved = Elements;
     }
@@ -102,6 +106,9 @@ public class GUI {
                 }
                 else if (b instanceof TextBox){
                     active = (TextBox)b;
+                }
+                else if (b instanceof Slider) {
+                    ((Slider)b).set(x);
                 }
             }
             return true;

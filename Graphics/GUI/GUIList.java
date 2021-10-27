@@ -20,7 +20,7 @@ public class GUIList extends GUIElement{
         list = new ArrayList<GUIElement>();
     }
 
-    List<GUIElement> getList(){
+    public List<GUIElement> getList(){
         return list;
     }
 

@@ -15,7 +15,7 @@ import utils.ByteUtils;
  */ 
 
 //at this time this class is a test that checks the ping between two systems
-public class InHandler implements Runnable {
+public class InHandler {
     boolean isserver;
     DataInputStream instream;
     OutHandler outhandler;
@@ -25,25 +25,13 @@ public class InHandler implements Runnable {
         instream = dis;
         outhandler = out;
         isserver = outhandler.server;
-        new Thread(this).start(); //does the run method or whatever
-        //while(instream != null){
-        //    try {
-        //        System.out.println("WAITING FOR PACKET");
-        //        processPacket();
-        //        System.out.println("GOT PACKET");
-        //    } catch (IOException e) {
-        //        e.printStackTrace();
-        //    }
-        //}
     }
 
     //checks for new packet in a while loop
     //to be quite honest i have no idea if this will work properly
-    public void run(){
+    public void handle(){
         try {
-            while(true){
-                processPacket();
-            }
+            processPacket();
         } catch (IOException e) {
 
         }

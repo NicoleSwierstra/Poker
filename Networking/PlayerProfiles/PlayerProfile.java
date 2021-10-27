@@ -83,6 +83,19 @@ public class PlayerProfile {
         return ppf;
     }
 
+    //creates a profile if none can be found
+    public static PlayerProfile AIprofile(){
+        BufferedImage buff;
+        try {
+            buff = ImageIO.read(new File("res/profiles/avatars/1_AI.png"));
+        } catch (IOException e) {
+            buff = new BufferedImage(256, 256, 2);
+            e.printStackTrace();
+        }
+        PlayerProfile ppf = new PlayerProfile(buff, "AI", 0, 0);
+        return ppf;
+    }
+
     //loading from input stream
     static PlayerProfile loadFromStream(InputStream in) throws IOException{
         String name = "";

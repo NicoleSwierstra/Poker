@@ -82,7 +82,7 @@ public class TableRenderer {
         }
     }
 
-    void Render(Graphics g, int pot, java.util.List<Card> com, java.util.List<Player> players, java.util.List<PlayerProfile> ppfs, int turnover, int turn, boolean showall){
+    public void Render(Graphics g, int pot, java.util.List<Card> com, java.util.List<Player> players, java.util.List<PlayerProfile> ppfs, int turnover, int turn, boolean showall){
         int h = win.g.paneheight, w = win.g.panewidth;
         int t = 0;
         for(int i : pPos.playerIndexes(players.size())){
@@ -109,7 +109,11 @@ public class TableRenderer {
             CardRenderer.drawCard(g, show,  0, -70, p.hand.get(1).suit, p.hand.get(1).num, 100);
         }
 
+        g.setColor(Color.WHITE);
         g.drawImage(ppf.avatar, -220, -50, 100, 100, null);
+        Font font = new Font("Comic Sans MS", 0, 20);
+        g.setFont(font);
+        g.drawString(p.name, -220, 65);
 
         for(int i = 0; i < p.money; i++){
             drawChip(g, 0, 110 + ((i/7) * 50), -70 + ((i % 7) * 15), 50);
