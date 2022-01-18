@@ -1,2 +1,5 @@
-# **Garbage Poker Game**
-Someone add more sound effects please
+# **Poker**
+
+Its a program that lets you play poker
+
+unifinished
